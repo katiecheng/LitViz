@@ -10,7 +10,7 @@ app = Flask(__name__)
 app.secret_key = '\xf5!\x07!qj\xa4\x08\xc6\xf8\n\x8a\x95m\xe2\x04g\xbb\x98|U\xa2f\x03'
 
 # Render the home page
-@app.route("/", methods=["GET"])
+@app.route("/", methods=["GET", "POST"])
 def index():
     session["search_text"]=''
     return render_template("index.html")
@@ -33,11 +33,16 @@ def viz():
 
 @app.route("/submit", methods=["POST"])
 def submit():
-    session["search_text"] = request.form.get("search_text")
-    if request.form['btn'] == "Search":
-        return redirect("/results")
-    elif request.form['btn'] == "Visualize Data!":
-        return redirect("/viz")
+    search_text = request.form.get("search_text")
+    session["search_text"] = search_text
+    if session["search_text"]:
+        if request.form['btn'] == "Search":
+            return redirect("/results")
+        elif request.form['btn'] == "Visualize Data!":
+            return redirect("/viz")
+    else:
+        return render_template("results.html", 
+                                search_text = search_text)
 
 if __name__ == '__main__':
     # Note that in production, you would want to disable debugging

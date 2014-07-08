@@ -34,9 +34,20 @@
                 border-color:#cccccc;
                 outline:0;
             }
+            select {
+                margin-left:10px;
+                width:150px;
+                height:30px;
+                border:2px;
+                border-radius:5px;
+                border-style:solid;
+                border-color:#cccccc;
+                color:#707070;
+                outline:0;
+            }
             input#searchbutton {
                 margin-left:10px;
-                width:60px;
+                width:150px;
                 height:30px;
                 border:2px;
                 border-radius:5px;
@@ -46,7 +57,7 @@
             }
             input#vizbutton {
                 margin-left:10px;
-                width:215px;
+                width:150px;
                 height:30px;
                 border:2px;
                 border-radius:5px;
@@ -90,6 +101,13 @@
         <div id="search">
                 <form action="/submit", method="POST">
                     <input id="searchbox" type="text" value="{{ search_text }}" name="search_text"/>
+                    <select name="type">
+                    <option value=""></option>
+                    <option value="title">Title</option>
+                    <option value="author">Author</option>
+                    <option value="keyword">Keyword</option>
+                    <option value="references">References</option>
+                    </select>
                     <input id="searchbutton" type="submit" value="Search" name="btn"/>
                     <input id="vizbutton" type="submit" value="Visualize Data!" name="btn"/>
                 </form>

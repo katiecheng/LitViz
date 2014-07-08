@@ -41,6 +41,18 @@
                 border-color:#cccccc;
                 outline:0;
             }
+            select {
+                margin-top:15px;
+                width:400px;
+                height:30px;
+                padding:5px;
+                color:#707070;
+                border:2px;
+                border-radius:5px;
+                border-style:solid;
+                border-color:#cccccc;
+                outline:0;
+            }
             input#searchbutton {
                 margin-top:15px;
                 width:400px;
@@ -61,6 +73,15 @@
             </div>
             <div id="search">
                     <input id="searchbox" type="text" placeholder="Search Publication Database" autofocus name="search_text"/><br>
+
+                    <select name="type">
+                    <option value=""></option>
+                    <option value="title">Title</option>
+                    <option value="author">Author</option>
+                    <option value="keyword">Keyword</option>
+                    <option value="references">References</option>
+                    </select><br>
+
                     <input id="searchbutton" type="submit" value="Search"/>
             </div>
         </form>
