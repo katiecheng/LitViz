@@ -1,0 +1,100 @@
+<html>
+    <head>
+        <style>
+            body {
+                font-family:sans-serif;
+            }
+            div#litviz{
+                position:absolute;
+                top:5%;
+                left:10%;
+                margin-top:-25px;
+            }
+            h1#logo{
+                text-align:left;
+                letter-spacing:2px;
+                font-weight:200;
+            }
+            a#logolink{
+                color: black;
+                text-decoration:none;
+            }
+            div#search {
+                position:absolute;
+                top:5%;
+                left:50%;
+                margin-left:-235px;
+            }
+            input#searchbox {
+                width:400px;
+                height:30px;
+                padding:5px;
+                border:2px;
+                border-radius:5px;
+                border-style:solid;
+                border-color:#cccccc;
+                outline:0;
+            }
+            input#searchbutton {
+                margin-left:10px;
+                width:60px;
+                height:30px;
+                border:2px;
+                border-radius:5px;
+                color:#707070;
+                background-color:#33CCCC;
+                outline:0;
+            }
+            input#vizbutton {
+                margin-left:10px;
+                width:215px;
+                height:30px;
+                border:2px;
+                border-radius:5px;
+                color:#707070;
+                background-color:#FFCC00;
+                outline:0;
+            }
+            div#results {
+                position:absolute;
+                width:80%;
+                height:80%;
+                margin-left:-40%;
+                background-color:#cccccc;
+                top:12%;
+                left:50%;
+                padding:10px;
+            }
+            div#viz {
+                position:absolute;
+                width:80%;
+                height:80%;
+                margin-left:-40%;
+                top:12%;
+                left:50%;
+                padding:10px;
+                border-width:1px;
+                border-style:solid;
+                border-color:#cccccc;
+            }
+            form {
+                display:inline-block;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="litviz">
+            <h1 id="logo">
+                <a id="logolink" href="/">LIT VIZ</a>
+            </h1>
+        </div>
+        <div id="search">
+                <form action="/submit", method="POST">
+                    <input id="searchbox" type="text" value="{{ search_text }}" name="search_text"/>
+                    <input id="searchbutton" type="submit" value="Search" name="btn"/>
+                    <input id="vizbutton" type="submit" value="Visualize Data!" name="btn"/>
+                </form>
+        </div>
+        {% block body %}{% endblock %}
+    </body>
+</html>
