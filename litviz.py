@@ -15,7 +15,7 @@ def index():
     session["search_text"]=''
     return render_template("index.html")
 
-@app.route("/results", methods=["POST"])
+@app.route("/results", methods=["GET", "POST"])
 def results():
     if session.get("search_text"):
         search_text = session.get("search_text")
@@ -25,7 +25,7 @@ def results():
     return render_template("results.html", 
                             search_text = search_text)
 
-@app.route("/viz", methods=["POST"])
+@app.route("/viz", methods=["GET","POST"])
 def viz():
     search_text = session.get("search_text")
     return render_template("viz.html", 
