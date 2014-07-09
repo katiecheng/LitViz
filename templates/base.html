@@ -100,8 +100,8 @@
         </div>
         <div id="search">
                 <form action="/submit", method="POST">
-                    <input id="searchbox" type="text" value="{{ search_text }}" name="search_text"/>
-                    <select name="type">
+                    <input id="searchbox" type="text" value="{{ search_text }}" name="search_text" required/>
+                    <select name="type" required>
                     <option value=""></option>
                     <option value="title">Title</option>
                     <option value="author">Author</option>
