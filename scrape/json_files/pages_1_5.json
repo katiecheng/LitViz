@@ -1,0 +1,57 @@
+ "publications":[
+                        {
+                            "pub_id": ED520003,
+                            "title": The Condition of Education 2011 in Brief. NCES 2011-034,
+                            "link": http://files.eric.ed.gov/fulltext/ED520003.pdf,
+                            "authors": [u'Aud, Susan, Ed.', u'Hannes, Gretchen, Ed. '],
+                            "source": National Center for Education Statistic,
+                            "year": 2011
+                            "short_desc": Since 1870, the federal government has gathered data about students, teachers, schools, and education funding. As mandated by Congress, the U.S. Department of Education's National Center for Education Statistics (NCES) in the Institute of Education Sciences annually publishes a statistical report on the status and progress of education in the?
+                            "descriptors": ['School Statistics', 'Educational Indicators', 'Educational Trends', 'Educational Finance']
+                        },
+                    
+                        {
+                            "pub_id": EJ1018015,
+                            "title": Higher Education and the Minerals Boom: A View from the Regions,
+                            "link": http://files.eric.ed.gov/fulltext/EJ1018015.pdf,
+                            "authors": [u'Bell, Philip '],
+                            "source": Australian Universities' Revie,
+                            "year": 2014
+                            "short_desc": This paper examines the impact of the minerals boom to date on the demand for higher education in Central Queensland, and the sustainability of higher education providers in high economic growth environments. Several datasets were used to examine changes in the demand for higher education among specific student groups within the region, the?
+                            "descriptors": ['Foreign Countries', 'Higher Education', 'Sustainability', 'Economic Development']
+                        },
+                    
+                        {
+                            "pub_id": EJ989513,
+                            "title": From Pedagogical Museum to Instructional Material Center: Education Libraries at Teacher Training Institutions, 1890s to 1970s,
+                            "link": http://files.eric.ed.gov/fulltext/EJ989513.pdf,
+                            "authors": [u'Attebury, Ramirose', u'Kroth, Michael '],
+                            "source": Education Librarie,
+                            "year": 2012
+                            "short_desc": The development of education libraries cannot be understood outside the context of education history. Changes in educational practices and technology spurred three phases of development in the history of education libraries. Early examples, often called curriculum laboratories, developed as spaces to create educational materials where limited?
+                            "descriptors": ['Libraries', 'Instructional Materials', 'Library Services', 'Educational Change']
+                        },
+                    
+                        {
+                            "pub_id": EJ989203,
+                            "title": Determination of Critical Achievement Factors in Distance Education by Using Structural Equality Model: A Case Study of E-MBA Program Held in Sakarya University,
+                            "link": http://files.eric.ed.gov/fulltext/EJ989203.pdf,
+                            "authors": [u'Evirgen, Hayrettin', u'Cengel, Metin '],
+                            "source": Turkish Online Journal of Educational Technology - TOJE,
+                            "year": 2012
+                            "short_desc": Nowadays, distance learning education has started to become familiar in behalf of classical face to face education (F2F) model. Web based learning is a major part of distance education systems. Web based distance learning can be defined shortly as an education type which doesn't force students and educators being into the same mediums. This?
+                            "descriptors": ['Academic Achievement', 'Distance Education', 'Performance Factors', 'Case Studies']
+                        },
+                    
+                        {
+                            "pub_id": ED524984,
+                            "title": Health Education Curriculum Content--Abstinence,
+                            "link": http://files.eric.ed.gov/fulltext/ED524984.pdf,
+                            "authors": NONE,
+                            "source": North Dakota Department of Public Instruction,
+                            "year": 2011
+                            "short_desc": As a result of House Bill 1229, introduced and passed during the 2011 North Dakota legislative session, every school district, both public and nonpublic, must expand health education to include abstinence education, if teaching sexuality education as part of the general health curriculum. This fact sheet provides guidance for districts in meeting?
+                            "descriptors": ['Health Education', 'Sex Education', 'Sexuality', 'Educational Legislation']
+                        },
+                    
+                ]
