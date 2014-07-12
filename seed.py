@@ -67,8 +67,6 @@ def cycle():
                 pub_dict["year"] = year
                 pub_dict["short_desc"] = short_desc
 
-                print title
-
                 update.add_publication(pub_dict)
                 update.add_authors(authors)
                 update.add_source(source)
