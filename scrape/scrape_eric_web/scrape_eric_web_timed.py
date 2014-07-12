@@ -1,8 +1,9 @@
 from pyquery import PyQuery as pq
 import re
+import time
 
 def cycle():
-    for group in range(1,16526, 5):
+    for group in range(16521,16526, 5):
     # for group in range(1,5,5):
         print "----------------",group,"----------------"
 
@@ -12,6 +13,9 @@ def cycle():
             
         with open("eric_json_files/pages_%d_%d.json"%(group, group+4), 'a') as f:
             for page in range(group, group+5):
+
+                time.sleep(2)
+
                 url = "http://eric.ed.gov/?q=education&ft=on&pg=%d" %page
                 print url
 

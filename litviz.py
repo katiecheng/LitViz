@@ -4,6 +4,7 @@ from flask import request
 from flask import render_template
 from flask import redirect
 from flask import session
+import model
 
 # Create a Flask web app
 app = Flask(__name__)

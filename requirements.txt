@@ -7,8 +7,9 @@ WTForms==1.0.2
 Werkzeug==0.8.3
 argparse==1.2.1
 cssselect==0.9.1
-distribute==0.6.24
 lxml==3.3.5
 pdfminer==20140328
+psycopg2==2.5.3
 pyquery==1.2.8
+simplejson==3.5.3
 wsgiref==0.1.2
