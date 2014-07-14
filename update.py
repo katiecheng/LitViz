@@ -35,22 +35,26 @@ def add_publication(pub_dict):
         new_pub.eric_id = pub_dict["eric_id"]
         new_pub.title = pub_dict["title"]
         new_pub.source_id = int(source_id)
-        new_pub.short_desc = pub_dict["short_desc"]
+        new_pub.full_desc = pub_dict["full_desc"]
         new_pub.url = pub_dict["url"]
         # new_pub.abstract = pub_dict["abstract"]
-        # new_pub.month = int(pub_dict["month"])
-        new_pub.year = int(pub_dict["year"])
+        if pub_dict.get("month"):
+            new_pub.month = int(pub_dict["month"])
+        if pub_dict.get("year"):
+            new_pub.year = int(pub_dict["year"])
         # new_pub.ISSN = pub_dict["ISSN"]
         # new_pub.journal_id = int(pub_dict["journal_id"])
-        # new_pub.volume = int(pub_dict["volume"])
-        # new_pub.issue = int(pub_dict["issue"])
-        # new_pub.start_page = int(pub_dict["start_page"])
-        # new_pub.end_page = int(pub_dict["end_page"])
+        if pub_dict.get("volume"):
+            new_pub.volume = int(pub_dict["volume"])
+        if pub_dict.get("issue"):
+            new_pub.issue = int(pub_dict["issue"])
+        if pub_dict.get("start_page"):
+            new_pub.start_page = int(pub_dict["start_page"])
+        if pub_dict.get("end_page"):
+            new_pub.end_page = int(pub_dict["end_page"])
 
         session.add(new_pub)
         session.commit()
-
-        print "eric id: %s" %new_pub.eric_id
 
         new_pub = session.query(model.Publication).filter_by(eric_id=new_pub.eric_id).one()
         new_pub_id = new_pub.id
@@ -98,8 +102,6 @@ def add_authors(session, author_list, pub_id):
         auth_id = auth.id
         add_pubAuth(session, pub_id, auth_id)
 
-        print "pubAuth: %s %s" %(pub_id, auth_id)
-
 def add_descriptors(session, descriptor_list, pub_id):
     session = model.session
 
@@ -119,8 +121,6 @@ def add_descriptors(session, descriptor_list, pub_id):
         desc = session.query(model.Descriptor).filter_by(phrase=descriptor).one()
         desc_id = desc.id
         add_pubDesc(session, pub_id, desc_id)
-
-        print "pubDesc: %s %s" %(pub_id, desc_id)
 
 def add_keyword():
     pass
