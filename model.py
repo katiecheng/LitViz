@@ -7,7 +7,7 @@ from sqlalchemy import ForeignKey, Table
 
 
 from sqlalchemy import create_engine
-ENGINE = create_engine('postgresql://localhost/publications', echo=True)
+ENGINE = create_engine('postgresql://localhost/publications', echo=False)
 session = scoped_session(sessionmaker(bind=ENGINE,
                                       autocommit = False,
                                       autoflush = False))
@@ -111,7 +111,7 @@ class Department(Base):
     id = Column(Integer, primary_key = True)
     name = Column(String(100))
 
-###Pivot tables
+### Pivot Tables
 
 class pubAuth(Base):
     __tablename__ = "pub_auth"

@@ -48,8 +48,6 @@ def cycle():
                 u_short_desc = current_pub.find('.r_d').text()
 
                 u_short_desc_split = u_short_desc.split(u'\r\n')
-                if eric_id == "ED544580":
-                    print u_short_desc_split
                 u_short_desc = ''
                 for item in u_short_desc_split:
                     u_short_desc += ' ' + item
@@ -64,13 +62,14 @@ def cycle():
                 pub_dict["eric_id"] = eric_id
                 pub_dict["title"] = title
                 pub_dict["url"] = link
+                pub_dict["authors"] = authors
+                pub_dict["source"] = source
                 pub_dict["year"] = year
                 pub_dict["short_desc"] = short_desc
+                pub_dict["descriptors"] = descriptors
 
-                update.add_publication(pub_dict)
-                update.add_authors(authors)
                 update.add_source(source)
-                update.add_descriptors(descriptors)
+                update.add_publication(pub_dict)
                     
 def main():
     cycle()
