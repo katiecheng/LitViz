@@ -7,7 +7,7 @@ from sqlalchemy import ForeignKey, Table
 
 
 from sqlalchemy import create_engine
-ENGINE = create_engine('postgresql://localhost/publications', echo=False)
+ENGINE = create_engine('postgresql://katiecheng:password@localhost/publications', echo=False)
 session = scoped_session(sessionmaker(bind=ENGINE,
                                       autocommit = False,
                                       autoflush = False))

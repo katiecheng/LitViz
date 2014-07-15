@@ -20,12 +20,18 @@
                 text-decoration:none;
             }
             div#search {
+                width:50%;
                 position:absolute;
                 top:5%;
                 right:10%;
             }
+
+            form#form {
+                width:100%;
+            }
+
             input#searchbox {
-                width:400px;
+                width:49%;
                 height:30px;
                 padding:5px;
                 border:2px;
@@ -35,8 +41,8 @@
                 outline:0;
             }
             select {
-                margin-left:10px;
-                width:150px;
+                margin-left:1%;
+                width:15%;
                 height:30px;
                 border:2px;
                 border-radius:5px;
@@ -46,8 +52,8 @@
                 outline:0;
             }
             input#searchbutton {
-                margin-left:10px;
-                width:150px;
+                margin-left:1%;
+                width:15%;
                 height:30px;
                 border:2px;
                 border-radius:5px;
@@ -56,8 +62,8 @@
                 outline:0;
             }
             input#vizbutton {
-                margin-left:10px;
-                width:150px;
+                margin-left:1%;
+                width:15%;
                 height:30px;
                 border:2px;
                 border-radius:5px;
@@ -74,6 +80,7 @@
                 top:12%;
                 left:50%;
                 padding:1%;
+                overflow:auto;
             }
             div#viz {
                 position:absolute;
@@ -99,14 +106,14 @@
             </h1>
         </div>
         <div id="search">
-                <form action="/submit", method="POST">
+                <form id="form" action="/submit", method="POST">
                     <input id="searchbox" type="text" value="{{ search_text }}" name="search_text" required/>
-                    <select name="type" required>
+                    <select name="search_type" required>
                     <option value=""></option>
-                    <option value="title">Title</option>
-                    <option value="author">Author</option>
-                    <option value="keyword">Keyword</option>
-                    <option value="references">References</option>
+                    <option value="Title">Title</option>
+                    <option value="Author">Author</option>
+                    <option value="Keyword">Keyword</option>
+                    <option value="References">References</option>
                     </select>
                     <input id="searchbutton" type="submit" value="Search" name="btn"/>
                     <input id="vizbutton" type="submit" value="Visualize Data!" name="btn"/>

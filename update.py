@@ -17,8 +17,6 @@ def add_source(source_string):
         session.add(new_source)
         session.commit()
 
-        print "source: %s" %new_source.name
-
 def add_publication(pub_dict):
     session = model.session
 

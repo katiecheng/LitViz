@@ -2,9 +2,14 @@
 {% block body %}
 
 <div id="results">
-    Database query 1 that matches {{ search_text }}<br>
-    Database query 2 that matches {{ search_text }}<br>
-    Database query 3 that matches {{ search_text }}<br>
+    Your query {{ search_text }} of category {{ search_type }}<br>
+    {% for result in results %}
+    <!--     <h1>{{ result }}</h1> -->
+        <h4>{{ result.eric_id }}: {{ result.title }}</h4>
+        <h5>{{ result.full_desc }}</h5>
+        <h4>{{ result.first_name}} {{ result.middle_name }} {{ result.last_name }}</h4>
+
+    {% endfor %}
 </div>
 
 {% endblock %}
