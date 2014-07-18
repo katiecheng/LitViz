@@ -40,7 +40,6 @@ def add_publication(pub_dict):
             new_pub.month = int(pub_dict["month"])
         if pub_dict.get("year"):
             new_pub.year = int(pub_dict["year"])
-        # new_pub.ISSN = pub_dict["ISSN"]
         # new_pub.journal_id = int(pub_dict["journal_id"])
         if pub_dict.get("volume"):
             new_pub.volume = int(pub_dict["volume"])
@@ -135,7 +134,17 @@ def add_department():
 ### Pivot Tables
 
 def add_reference():
-    pass
+    exists = session.query(model.pubAuth).filter_by(pub_id=pub_id,
+                                                    auth_id=auth_id).all()
+
+    if exists:
+        pass
+    else:
+        new_pubAuth = model.pubAuth()
+        new_pubAuth.pub_id = pub_id
+        new_pubAuth.auth_id = auth_id
+        session.add(new_pubAuth)
+        session.commit()
 
 def add_pubAuth(session, pub_id, auth_id):
 

@@ -1,5 +1,6 @@
 <html>
     <head>
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script> 
         <style>
             body {
                 font-family:sans-serif;
@@ -106,7 +107,7 @@
             </h1>
         </div>
         <div id="search">
-                <form id="form" action="/submit", method="POST">
+                <form id="form" action="/submit" method="POST">
                     <input id="searchbox" type="text" value="{{ search_text }}" name="search_text" required/>
                     <select name="search_type" required>
                     <option value=""></option>
@@ -115,10 +116,13 @@
                     <option value="Keyword">Keyword</option>
                     <option value="References">References</option>
                     </select>
-                    <input id="searchbutton" type="submit" value="Search" name="btn"/>
-                    <input id="vizbutton" type="submit" value="Visualize Data!" name="btn"/>
+                    <input id="searchbutton" type="submit" value="Search" name="search_button"/>
+                    <input id="vizbutton" type="submit" value="Visualize Data!" name="viz_button"/>
                 </form>
         </div>
         {% block body %}{% endblock %}
     </body>
+    <script type="text/javascript">
+
+    </script>
 </html>

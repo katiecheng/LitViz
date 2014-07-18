@@ -3,7 +3,7 @@ import update
 import time
 
 def cycle():
-    # for group in range(16521,16526, 5):
+    # for group in range(1,16526, 5):
     for group in range(1,5,5):
         print "----------------",group,"----------------"
 

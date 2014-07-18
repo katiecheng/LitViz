@@ -44,7 +44,6 @@ class Publication(Base):
     abstract = Column(String(3000))
     month = Column(Integer)
     year = Column(Integer)
-    ISSN = Column(String(20))
     journal_id = Column(Integer, ForeignKey('journals.id'))
     volume = Column(Integer)
     issue = Column(Integer)
@@ -59,8 +58,8 @@ class Publication(Base):
 
     referenced_by = relationship("Publication",
         secondary=references,
-        primaryjoin=id==references.c.parent_pub_id,
-        secondaryjoin=id==references.c.child_pub_id,
+        primaryjoin=id==references.c.child_pub_id,
+        secondaryjoin=id==references.c.parent_pub_id,
         backref="references")
 
 class Author(Base):

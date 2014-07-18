@@ -3,7 +3,7 @@ import urllib2
 
 pattern = r'<a href="(http://files.eric.ed.gov/fulltext/(.+?).pdf)" target="_blank">'
 
-for page in range(2312,9000):
+for page in range(5552,9000):
 	
 	print "Requesting source from page %d" %page
 	url = 'http://eric.ed.gov/?q=education&ft=on&pg=%d' %page
