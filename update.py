@@ -63,41 +63,43 @@ def add_authors(session, author_list, pub_id):
 
     for author in author_list:
         author_split = author.split(', ')
-        author_split_again = author_split[1].split(' ')
 
-        last_name = author_split[0]
-        first_name = author_split_again[0]
-        middle_name = ''
+        if len(author_split) > 1:
+            author_split_again = author_split[1].split(' ')
 
-        if len(author_split_again) > 1:
-            
-            for part in author_split_again[1:]:
-                if part == '{" Ed."}':
-                    pass
-                else:
-                    middle_name += part + ' '
-        middle_name = middle_name.strip()
+            last_name = author_split[0][:30]
+            first_name = author_split_again[0]
+            middle_name = ''
 
-        exists = session.query(model.Author).filter_by(first_name=first_name,
-                                                        middle_name=middle_name,
-                                                        last_name=last_name).all()
+            if len(author_split_again) > 1:
+                
+                for part in author_split_again[1:]:
+                    if part == '{" Ed."}':
+                        pass
+                    else:
+                        middle_name += part + ' '
+            middle_name = middle_name.strip()
 
-        if exists:
-            pass
-        else:
-            new_author = model.Author()
-            new_author.last_name = last_name
-            new_author.first_name = first_name
-            new_author.middle_name = middle_name
+            exists = session.query(model.Author).filter_by(first_name=first_name,
+                                                            middle_name=middle_name,
+                                                            last_name=last_name).all()
 
-            session.add(new_author)
-            session.commit()
+            if exists:
+                pass
+            else:
+                new_author = model.Author()
+                new_author.last_name = last_name
+                new_author.first_name = first_name
+                new_author.middle_name = middle_name
 
-        auth = session.query(model.Author).filter_by(first_name=first_name,
-                                                        middle_name=middle_name,
-                                                        last_name=last_name).one()
-        auth_id = auth.id
-        add_pubAuth(session, pub_id, auth_id)
+                session.add(new_author)
+                session.commit()
+
+            auth = session.query(model.Author).filter_by(first_name=first_name,
+                                                            middle_name=middle_name,
+                                                            last_name=last_name).one()
+            auth_id = auth.id
+            add_pubAuth(session, pub_id, auth_id)
 
 def add_descriptors(session, descriptor_list, pub_id):
     session = model.session

@@ -21,14 +21,14 @@ def cycle():
         'Dec':12, 'December':12
     }
 
-    for group in range(1,16526, 5):
+    for group in range(361,16526, 5):
     # for group in range(1,5,5):
         print "----------------",group,"----------------"
 
         for page in range(group, group+5):
 
             # wait two seconds between every page request
-            time.sleep(2)
+            # time.sleep(2)
 
             url = "http://eric.ed.gov/?q=education&ft=on&pg=%d" %page
             print url
@@ -143,13 +143,13 @@ def cycle():
                 pub_dict["title"] = title
                 pub_dict["url"] = link
                 pub_dict["authors"] = authors
-                pub_dict["source"] = source
+                pub_dict["source"] = source[:100]
                 pub_dict["year"] = year
-                pub_dict["full_desc"] = deep_desc
+                pub_dict["full_desc"] = deep_desc[:5000]
                 pub_dict["descriptors"] = deep_descriptors
 
                 # add the publication entry (and all related info) to DB
-                update.add_source(source)
+                update.add_source(source[:100])
                 update.add_publication(pub_dict)
                     
 def main():

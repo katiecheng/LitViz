@@ -39,7 +39,7 @@ class Publication(Base):
     eric_id = Column(String(20), nullable=False)
     title = Column(String(500))
     source_id = Column(Integer, ForeignKey('sources.id'))
-    full_desc = Column(String(3000))
+    full_desc = Column(String(5000))
     url = Column(String(100))
     abstract = Column(String(3000))
     month = Column(Integer)
@@ -66,10 +66,10 @@ class Author(Base):
     __tablename__ = "authors"
 
     id = Column(Integer, primary_key = True)
-    first_name = Column(String(20))
-    middle_name = Column(String(20))
-    last_name = Column(String(20))
-    credential = Column(String(20))
+    first_name = Column(String(30))
+    middle_name = Column(String(30))
+    last_name = Column(String(30))
+    credential = Column(String(30))
     position = Column(String(50))
     institution_id = Column(Integer, ForeignKey('institutions.id'))
     department_id = Column(Integer, ForeignKey('departments.id'))
