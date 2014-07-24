@@ -1,8 +1,203 @@
 {% extends 'base.html' %}
 {% block body %}
 
+<style>
+
+    /*node styling*/
+    .node circle {
+        fill: #fff;
+        stroke: steelblue;
+        stroke-width: 3px;
+    }
+
+    .node text { font: 12px sans-serif; }
+
+    .link {
+        fill: none;
+        stroke: #cccccc;
+        stroke-width: 2px;
+    }
+
+    .axis text {
+        font-family: sans-serif;
+        font-size: 12px;
+    }
+
+    .axis path {
+      display: none;
+    }
+
+    .axis line {
+      stroke: #cccccc;
+      stroke-dasharray: 2,2;
+    }
+        </style>
+
+
 <div id="viz">
-    This is where visualizations go!
 </div>
+
+<script src="http://d3js.org/d3.v3.min.js"></script>
+    
+<script>
+
+var treeData = [
+    {
+        "name": "Pub1, 1967",
+        "parent": "null",
+        "time": 1967,
+        "relatedness": 10,
+        "children": [
+            {
+                "name": "Pub2, 1990",
+                "parent": "Pub1, 1967",
+                "time": 1990,
+                "relatedness": 7,
+                "children": [
+                    {
+                        "name": "Pub6, 2000",
+                        "parent": "Pub2, 1990",
+                        "time": 2000,
+                        "relatedness": 5
+                    },
+                    {
+                        "name": "Pub7, 2013",
+                        "parent": "Pub2, 1990",
+                        "time": 2013,
+                        "relatedness": 1
+                    }
+                ]
+            },
+            {
+                "name": "Pub3, 1997",
+                "parent": "Pub1, 1967",
+                "time": 1997,
+                "relatedness": 7
+            },
+            {
+                "name": "Pub4, 1984",
+                "parent": "Pub1, 1967",
+                "time": 1984,
+                "relatedness": 3,
+                "children": [
+                    {
+                        "name": "Pub8, 2009",
+                        "parent": "Pub4, 1984",
+                        "time": 2009,
+                        "relatedness": 2
+                    },
+                    {
+                        "name": "Pub9, 2003",
+                        "parent": "Pub4, 1984",
+                        "time": 2003,
+                        "relatedness": 9
+                    }
+                ]
+            },
+            {
+                "name": "Pub5, 1981",
+                "parent": "Pub1, 1967",
+                "time": 1981,
+                "relatedness": 3
+            }
+        ]
+    }
+];
+
+var yScale = d3.scale.linear()
+                     .domain([1967, 2013])
+                     // .domain([d3.min(treeData, function(d) { return d.time; } ), d3.max(treeData, function(d) { return d.time; } ) ])
+                     .range([0, 500]);
+
+var rScale = d3.scale.linear()
+                     // .domain([0,10])
+                     .domain([0, d3.max(treeData, function(d) { return d.relatedness; } ) ])
+                     .range([2, 10]);
+
+//Define Y axis
+var yAxis = d3.svg.axis()
+                  .scale(yScale)
+                  .orient("right")
+                  .tickFormat(d3.format("d")) //change tick format to remove commas
+                  .tickSize(1000)
+                  // .ticks([5])
+                  
+
+// ************** Generate the tree diagram  *****************
+var margin = {top: 50, right: 50, bottom: 50, left: 50},
+    // width = $("#viz").width
+    width = 1125 - margin.right - margin.left,
+    height = 600 - margin.top - margin.bottom;
+
+    
+var i = 0;
+
+var tree = d3.layout.tree()
+    .size([width, height]);
+
+var diagonal = d3.svg.diagonal()
+    .projection(function(d) { return [d.x, d.y]; });
+
+var svg = d3.select("#viz").append("svg")
+    // .attr("width", width + margin.right + margin.left)
+    // .attr("height", height + margin.top + margin.bottom)
+    .append("g")
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+root = treeData[0];
+    
+update(root);
+
+$("svg").width("100%");
+$("svg").height("100%");
+
+function update(source) {
+
+    //Create Y axis
+    svg.append("g")
+        .attr("class", "axis")
+        .call(yAxis);
+
+    // Compute the new tree layout.
+    var nodes = tree.nodes(root).reverse(),
+        links = tree.links(nodes);
+
+    // Normalize for fixed-depth.
+    nodes.forEach(function(d) { d.y = yScale(d.time) ; });
+
+    // Declare the nodes…
+    var node = svg.selectAll("g.node")
+        .data(nodes, function(d) { return d.id || (d.id = ++i); });
+
+    // Enter the nodes.
+    var nodeEnter = node.enter().append("g")
+        .attr("class", "node")
+        .attr("transform", function(d) { 
+            return "translate(" + d.x + "," + d.y + ")"; });
+
+    nodeEnter.append("circle")
+        .attr("r", function(d) { return rScale(d.relatedness) })
+        .style("fill", "#fff");
+
+    nodeEnter.append("text")
+        .attr("y", function(d) { 
+            return d.children || d._children ? -18 : 18; })
+        .attr("dy", ".35em")
+        .attr("text-anchor", "middle")
+        .text(function(d) { return d.name; })
+        .style("fill-opacity", 1);
+
+    // Declare the links…
+    var link = svg.selectAll("path.link")
+        .data(links, function(d) { return d.target.id; });
+
+    // Enter the links.
+    link.enter().insert("path", "g")
+        .attr("class", "link")
+        .attr("d", diagonal);
+
+} //closes update
+
+</script>
 
 {% endblock %}

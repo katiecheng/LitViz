@@ -21,8 +21,8 @@ def cycle():
         'Dec':12, 'December':12
     }
 
-    # for group in range(361,16526, 5):
-    for group in range(1,5,5):
+    for group in range(2381,16526, 5):
+    # for group in range(1,5,5):
         print "----------------",group,"----------------"
 
         for page in range(group, group+5):
@@ -140,7 +140,7 @@ def cycle():
                         pub_dict["month"] = None
 
                 pub_dict["eric_id"] = eric_id
-                pub_dict["title"] = title
+                pub_dict["title"] = title[:500]
                 pub_dict["url"] = link
                 pub_dict["authors"] = authors
                 pub_dict["source"] = source[:100]

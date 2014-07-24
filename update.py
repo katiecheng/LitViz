@@ -78,7 +78,7 @@ def add_authors(session, author_list, pub_id):
                         pass
                     else:
                         middle_name += part + ' '
-            middle_name = middle_name.strip()
+            middle_name = middle_name.strip()[:30]
 
             exists = session.query(model.Author).filter_by(first_name=first_name,
                                                             middle_name=middle_name,
