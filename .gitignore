@@ -1,3 +1,4 @@
 env
 *pyc
 scrape/scrape_eric_web/eric_json_files/
+d3
