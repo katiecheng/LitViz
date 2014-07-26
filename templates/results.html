@@ -1,18 +1,45 @@
 {% extends 'base.html' %}
 {% block body %}
-
+<style>
+    div#entry {
+                margin:1%;
+                margin-bottom:0;
+                padding:1%;
+                border-width:1px;
+                border-style:solid;
+                border-color:black;
+            }
+</style>
 <div id="results">
-    Your query {{ search_text }} of category {{ search_type }}<br>
+    Results from your query "{{ search_text }}" of category "{{ search_type }}"<br>
     {% for i in range(length) %}
-        <h1>{{ results[i].id }}</h1>
-        <h4>{{ results[i].eric_id }}: {{ results[i].title }}</h4>
-        <h4>Authors: </h4>
-        <h5>{{ authors[i] }}</h5>
-        <h5>{{ sources[i].name }}, {{ results[i].year }}</h5>
+        <div id = "entry">
+        <!-- <h1>{{ results[i].id }}</h1> -->
+        <!-- <h4>{{ results[i].eric_id }}</h4> -->
+        <h4><a href = {{ results[i].url }} >{{ results[i].title }}</a></h4> 
+        <!-- <h4>{{ results[i].year }}</h4> -->
+        <!-- <h5>{{ sources[i].name }}</h5> -->
+
+        <!-- <h4>Authors: </h4> -->
+        <h5>{% for author in authors[i] %}
+
+        - {{ author["last_name"] }}, {{ author["first_name"] }} {{ author["middle_name"] }} - 
+
+        {% endfor %}</h5>
+
         <h5>{{ results[i].full_desc }}</h5>
-        <h5>{{ descriptors[i] }}</h5>
-        <h4>References: </h4>
-        <h5>{{ references[i] }}</h5>
+
+        <!-- <h4>Descriptors: </h4> -->
+        <h5>{% for desc in descriptors[i] %}
+        - {{ desc["phrase"] }} -
+        {% endfor %}</h5>
+
+        <!-- <h4>References: </h4>
+        {% for ref in references[i] %}
+        <h5>{{ref["title"]}}</h5>
+        {% endfor %} -->
+        <input id="vizbutton" type="submit" value="Visualize Data!" name="viz_button"/>
+    </div>
 
     {% endfor %}
 </div>

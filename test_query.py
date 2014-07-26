@@ -1,4 +1,4 @@
-import model
+import test_model
 
 ### CONVERT ROWS TO DICTIONARIES
 def row2dict(row):
@@ -9,20 +9,20 @@ def row2dict(row):
 
 ### GET PUBLICATION INFO
 def get_pub_source(pub_id):
-	session = model.session
+	session = test_model.session
 
-	pub = session.query(model.Publication).get(pub_id)
+	pub = session.query(test_model.Publication).get(pub_id)
 	source_id = pub.source_id
-	source = session.query(model.Source).get(source_id)
+	source = session.query(test_model.Source).get(source_id)
 	return row2dict(source)
 
 def get_pub_journal():
 	pass
 
 def get_pub_references(pub_id):
-	session = model.session
+	session = test_model.session
 
-	pub = session.query(model.Publication).get(pub_id)
+	pub = session.query(test_model.Publication).get(pub_id)
 	refs = pub.references
 	ref_dicts = []
 	for ref in refs:
@@ -30,38 +30,43 @@ def get_pub_references(pub_id):
 	return ref_dicts
 
 def get_pub_referenced_by(pub_id):
-	session = model.session
+	session = test_model.session
 
-	ref_by = session.query(model.references).filter_by(child_pub_id=pub_id)
+	ref_by = session.query(test_model.references).filter_by(child_pub_id=pub_id)
 	ref_by_ids = [ref.parent_pub_id for ref in ref_by]
-	return row2dict(ref_by_ids)
+
+	ref_by_dicts = []
+	for ref_by_id in ref_by_ids:
+		ref_by = session.query(test_model.Publication).get(ref_by_id)
+		ref_by_dicts.append(row2dict(ref_by))
+	return ref_by_dicts
 
 def get_pub(pub_id):
-	session = model.session
+	session = test_model.session
 
-	pub = session.query(model.Publication).get(pub_id)
+	pub = session.query(test_model.Publication).get(pub_id)
 	return row2dict(pub)
 
 def get_pubs(search_text, column):
-	session = model.session 
+	session = test_model.session 
 	if column == "title":
-		pubs = session.query(model.Publication
-			).filter(model.Publication.title.ilike("%" + search_text + "%")).limit(10)
+		pubs = session.query(test_model.Publication
+			).filter(test_model.Publication.title.ilike("%" + search_text + "%")).limit(10)
 	elif column == "full_desc":
-		pubs = session.query(model.Publication
-			).filter(model.Publication.full_desc.ilike("% " + search_text + " %")).limit(10)
+		pubs = session.query(test_model.Publication
+			).filter(test_model.Publication.full_desc.ilike("% " + search_text + " %")).limit(10)
 	pub_dicts = []
 	for pub in pubs:
 		pub_dicts.append(row2dict(pub))
 	return pub_dicts
 
 def get_pub_authors(pub_id):
-	session = model.session
+	session = test_model.session
 
-	pub = session.query(model.Publication).get(pub_id)
+	pub = session.query(test_model.Publication).get(pub_id)
 	pub_auth_list = pub.pub_auth
 	pub_auth_id_list = [pub_auth.auth_id for pub_auth in pub_auth_list]
-	auths = [session.query(model.Author).get(auth_id) for auth_id in pub_auth_id_list]
+	auths = [session.query(test_model.Author).get(auth_id) for auth_id in pub_auth_id_list]
 	auth_dicts = []
 	for auth in auths:
 		auth_dicts.append(row2dict(auth))
@@ -69,12 +74,12 @@ def get_pub_authors(pub_id):
 	return auth_dicts
 
 def get_pub_descriptors(pub_id):
-	session = model.session
+	session = test_model.session
 
-	pub = session.query(model.Publication).get(pub_id)
+	pub = session.query(test_model.Publication).get(pub_id)
 	pub_desc_list = pub.pub_desc
 	pub_desc_id_list = [pub_desc.desc_id for pub_desc in pub_desc_list]
-	descs = [session.query(model.Descriptor).get(desc_id) for desc_id in pub_desc_id_list]
+	descs = [session.query(test_model.Descriptor).get(desc_id) for desc_id in pub_desc_id_list]
 	desc_dicts = []
 	for desc in descs:
 		desc_dicts.append(row2dict(desc))
@@ -82,9 +87,9 @@ def get_pub_descriptors(pub_id):
 	return desc_dicts
 
 def get_pub_desc_ids(pub_id):
-	session = model.session
+	session = test_model.session
 
-	pub = session.query(model.Publication).get(pub_id)
+	pub = session.query(test_model.Publication).get(pub_id)
 	pub_desc_list = pub.pub_desc
 	pub_desc_id_list = [pub_desc.desc_id for pub_desc in pub_desc_list]
 	return pub_desc_id_list
@@ -97,12 +102,12 @@ def get_pub_commonwords():
 
 ### GET AUTHOR INFO
 def get_auth_publications(auth_id):
-	session = model.session
+	session = test_model.session
 
-	auth = session.query(model.Author).get(auth_id)
+	auth = session.query(test_model.Author).get(auth_id)
 	pub_auth_list = auth.pub_auth
 	pub_auth_id_list = [pub_auth.pub_id for pub_auth in pub_auth_list]
-	pubs = [session.query(model.Publication).get(pub_id) for pub_id in pub_auth_id_list]
+	pubs = [session.query(test_model.Publication).get(pub_id) for pub_id in pub_auth_id_list]
 	pub_dicts = []
 	for pub in pubs:
 		pub_dicts.append(row2dict(pub))
@@ -110,12 +115,12 @@ def get_auth_publications(auth_id):
 
 ### GET DESCRIPTOR INFO
 def get_desc_publications(desc_id):
-	session = model.session
+	session = test_model.session
 
-	desc = session.query(model.Descriptor).get(desc_id)
+	desc = session.query(test_model.Descriptor).get(desc_id)
 	pub_desc_list = desc.pub_desc
 	pub_desc_id_list = [pub_desc.pub_id for pub_desc in pub_desc_list]
-	pubs = [session.query(model.Publication).get(pub_id) for pub_id in pub_desc_id_list]
+	pubs = [session.query(test_model.Publication).get(pub_id) for pub_id in pub_desc_id_list]
 	pub_dicts = []
 	for pub in pubs:
 		pub_dicts.append(row2dict(pub))

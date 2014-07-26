@@ -28,14 +28,12 @@ def results():
     search_type = session.get("search_type")
 
     if search_type == "Title":
-        query_list = model.session.query(model.Publication
-            ).filter(model.Publication.title.ilike("%" + search_text + "%")
-            ).all()
+        query_list = query.get_pubs(search_text, "title")
 
-        source_list = [query.get_pub_source(pub.id) for pub in query_list]
-        auth_list = [query.get_pub_authors(pub.id) for pub in query_list]
-        desc_list = [query.get_pub_descriptors(pub.id) for pub in query_list]
-        ref_list = [query.get_pub_references(pub.id) for pub in query_list]
+        source_list = [query.get_pub_source(pub["id"]) for pub in query_list]
+        auth_list = [query.get_pub_authors(pub["id"]) for pub in query_list]
+        desc_list = [query.get_pub_descriptors(pub["id"]) for pub in query_list]
+        ref_list = [query.get_pub_references(pub["id"]) for pub in query_list]
 
     elif search_type == "Author":
         auth_list = model.session.query(model.Author
@@ -49,20 +47,18 @@ def results():
             for auth_pub in auth_pubs:
                 query_list.append(auth_pub)
 
-        source_list = [query.get_pub_source(pub.id) for pub in query_list]
-        auth_list = [query.get_pub_authors(pub.id) for pub in query_list]
-        desc_list = [query.get_pub_descriptors(pub.id) for pub in query_list]
-        ref_list = [query.get_pub_references(pub.id) for pub in query_list]
+        source_list = [query.get_pub_source(pub["id"]) for pub in query_list]
+        auth_list = [query.get_pub_authors(pub["id"]) for pub in query_list]
+        desc_list = [query.get_pub_descriptors(pub["id"]) for pub in query_list]
+        ref_list = [query.get_pub_references(pub["id"]) for pub in query_list]
 
     elif search_type == "Keyword":
-        query_list = model.session.query(model.Publication
-            ).filter(model.Publication.full_desc.ilike("%" + search_text + "%")
-            ).all()
+        query_list = query.get_pubs(search_text, "full_desc")
 
-        source_list = [query.get_pub_source(pub.id) for pub in query_list]
-        auth_list = [query.get_pub_authors(pub.id) for pub in query_list]
-        desc_list = [query.get_pub_descriptors(pub.id) for pub in query_list]
-        ref_list = [query.get_pub_references(pub.id) for pub in query_list]
+        source_list = [query.get_pub_source(pub["id"]) for pub in query_list]
+        auth_list = [query.get_pub_authors(pub["id"]) for pub in query_list]
+        desc_list = [query.get_pub_descriptors(pub["id"]) for pub in query_list]
+        ref_list = [query.get_pub_references(pub["id"]) for pub in query_list]
 
     else:
         query_list = ['uhg']

@@ -90,7 +90,7 @@ function update(source) {
         links = tree.links(nodes);
 
     // Normalize for fixed-depth.
-    nodes.forEach(function(d) { d.y = d.depth * 180; });
+    nodes.forEach(function(d) { d.y = height - d.depth * 180; }); //added "height -" to flip upsidedown
 
     // Declare the nodes…
     var node = svg.selectAll("g.node")
