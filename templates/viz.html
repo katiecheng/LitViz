@@ -310,6 +310,23 @@ var treeData = [
             },
             {
                 "abstract": null,
+                "children": [],
+                "end_page": null,
+                "eric_id": null,
+                "full_desc": null,
+                "id": 4,
+                "issue": null,
+                "journal_id": null,
+                "month": null,
+                "source_id": null,
+                "start_page": null,
+                "title": "pub4",
+                "url": null,
+                "volume": null,
+                "year": 1960
+            },
+            {
+                "abstract": null,
                 "children": [
                     {
                         "abstract": null,
@@ -357,23 +374,6 @@ var treeData = [
                 "url": null,
                 "volume": null,
                 "year": 1970
-            },
-            {
-                "abstract": null,
-                "children": [],
-                "end_page": null,
-                "eric_id": null,
-                "full_desc": null,
-                "id": 4,
-                "issue": null,
-                "journal_id": null,
-                "month": null,
-                "source_id": null,
-                "start_page": null,
-                "title": "pub4",
-                "url": null,
-                "volume": null,
-                "year": 1960
             }
         ],
         "end_page": null,
@@ -395,7 +395,7 @@ var treeData = [
 var yScale = d3.scale.linear()
                      .domain([1940, 2020])
                      // .domain([d3.min(treeData, function(d) { return d.time; } ), d3.max(treeData, function(d) { return d.time; } ) ])
-                     .range([0, 500]);
+                     .range([0, 1125]);
 
 var rScale = d3.scale.linear()
                      // .domain([0,10])
@@ -405,17 +405,17 @@ var rScale = d3.scale.linear()
 //Define Y axis
 var yAxis = d3.svg.axis()
                   .scale(yScale)
-                  .orient("right")
+                  .orient("bottom")
                   .tickFormat(d3.format("d")) //change tick format to remove commas
-                  .tickSize(1000)
+                  .tickSize(550)
                   // .ticks([5])
                   
 
 // ************** Generate the tree diagram  *****************
-var margin = {top: 50, right: 50, bottom: 50, left: 50},
+var margin = {top: 25, right: 50, bottom: 25, left: 50},
     // width = $("#viz").width
-    width = 1125 - margin.right - margin.left,
-    height = 600 - margin.top - margin.bottom;
+    width = 600 - margin.right - margin.left,
+    height = 1125 - margin.top - margin.bottom;
 
     
 var i = 0;
@@ -424,7 +424,7 @@ var tree = d3.layout.tree()
     .size([width, height]);
 
 var diagonal = d3.svg.diagonal()
-    .projection(function(d) { return [d.x, d.y]; });
+    .projection(function(d) { return [d.y, d.x]; });
 
 var svg = d3.select("#viz").append("svg")
     .attr("width", width + margin.right + margin.left)
@@ -436,8 +436,8 @@ root = treeData[0];
     
 update(root);
 
-// $("svg").width("100%");
-// $("svg").height("50%");
+$("svg").width("100%");
+$("svg").height("100%");
 
 function update(source) {
 
@@ -463,7 +463,7 @@ function update(source) {
         .attr("pubid", function(d) {return d.pubid; }) //added pubid attribute to nodes
         .attr("xcoord", function(d) {return Math.round(d.x * 100) / 100; })
         .attr("ycoord", function(d) {return Math.round(d.y * 100) / 100; })
-        .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
+        .attr("transform", function(d) { return "translate(" + d.y + "," + d.x + ")"; });
 
     nodeEnter.append("circle")
         .attr("r", 5)
