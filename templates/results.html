@@ -38,7 +38,10 @@
         {% for ref in references[i] %}
         <h5>{{ref["title"]}}</h5>
         {% endfor %} -->
-        <input id="vizbutton" type="submit" value="Visualize Data!" name="viz_button"/>
+        <form id="form" action="/submit" method="POST">
+        <input type="hidden" name="hidden_id" value="{{ publist[i] }}">
+        <input id="{{ publist[i] }}" class="vizbutton" type="submit" value="Visualize Data!" name="viz_button"/>
+        </form>
     </div>
 
     {% endfor %}

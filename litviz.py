@@ -6,6 +6,7 @@ from flask import redirect
 from flask import session
 import model
 import query
+import viz as viz_mod
 
 # Create a Flask web app
 app = Flask(__name__)
@@ -30,6 +31,7 @@ def results():
     if search_type == "Title":
         query_list = query.get_pubs(search_text, "title")
 
+        pub_list = [pub["id"] for pub in query_list]
         source_list = [query.get_pub_source(pub["id"]) for pub in query_list]
         auth_list = [query.get_pub_authors(pub["id"]) for pub in query_list]
         desc_list = [query.get_pub_descriptors(pub["id"]) for pub in query_list]
@@ -47,6 +49,7 @@ def results():
             for auth_pub in auth_pubs:
                 query_list.append(auth_pub)
 
+        pub_list = [pub["id"] for pub in query_list]
         source_list = [query.get_pub_source(pub["id"]) for pub in query_list]
         auth_list = [query.get_pub_authors(pub["id"]) for pub in query_list]
         desc_list = [query.get_pub_descriptors(pub["id"]) for pub in query_list]
@@ -55,6 +58,7 @@ def results():
     elif search_type == "Keyword":
         query_list = query.get_pubs(search_text, "full_desc")
 
+        pub_list = [pub["id"] for pub in query_list]
         source_list = [query.get_pub_source(pub["id"]) for pub in query_list]
         auth_list = [query.get_pub_authors(pub["id"]) for pub in query_list]
         desc_list = [query.get_pub_descriptors(pub["id"]) for pub in query_list]
@@ -62,6 +66,7 @@ def results():
 
     else:
         query_list = ['uhg']
+        pub_list = [0]
         source_list = ['boo']
         desc_list = ['no']
         ref_list = ['stop']
@@ -75,6 +80,7 @@ def results():
                             search_type = search_type,
                             length = len(query_list),
                             results = query_list,
+                            publist = pub_list,
                             sources = source_list,
                             authors = auth_list,
                             descriptors = desc_list,
@@ -84,9 +90,11 @@ def results():
 def viz():
     search_text = session.get("search_text")
     search_type = session.get("search_type")
+    pub_id = session.get("pub_id")
     return render_template("viz.html", 
                             search_text = search_text,
-                            search_type = search_type)
+                            search_type = search_type,
+                            data = viz_mod.get_viz_json(pub_id))
 
 @app.route("/submit", methods=["POST"])
 def submit():
@@ -97,6 +105,7 @@ def submit():
     elif request.form.get("viz_button"):
         session["search_text"] = request.form.get("search_text")
         session["search_type"] = request.form.get("search_type")
+        session["pub_id"] = request.form.get("hidden_id")
         return redirect ("/viz")
 
 if __name__ == '__main__':

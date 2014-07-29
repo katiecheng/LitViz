@@ -10,14 +10,9 @@ def add_publication(pub_dict):
     session.add(new_pub)
     session.commit()
 
-def add_references(parent_pub_id, child_pub_id):
+def add_references(ref_tuple):
     session = test_model.session
-
-    new_ref = test_model.references()
-    new_ref.parent_pub_id = parent_pub_id
-    new_ref.child_pub_id = child_pub_id
-
-    session.add(new_ref)
+    session.execute(test_model.references.insert().values(ref_tuple))
     session.commit()
 
 pubs_list = [
@@ -53,7 +48,7 @@ def main():
         add_publication(pub)
 
     for ref in refs_list:
-        add_references(ref[0], ref[1])
+        add_references(ref)
 
 if __name__ == "__main__":
     main()
