@@ -28,13 +28,30 @@
     }
 
     .axis line {
-      stroke: #cccccc;
-      stroke-dasharray: 2,2;
+        stroke: #cccccc;
+        stroke-dasharray: 2,2;
     }
-        </style>
 
+    #pubinfo {
+        position: absolute;
+        width:190px;
+        height:115px;
+        visibility: hidden;
+        padding:10px;
+        border:2px;
+        border-radius:10px;
+        border-style:solid;
+        border-color:#cccccc;
+        background-color: #fff;
+        opacity:0.75;
+    }
+
+</style>
 
 <div id="viz">
+    <div id="pubinfo">
+        <p></p>
+    </div>
 </div>
 
 <script src="http://d3js.org/d3.v3.min.js"></script>
@@ -114,7 +131,7 @@ function update(source) {
     // Enter the nodes.
     var nodeEnter = node.enter().append("g")
         .attr("class", "node")
-        .attr("pubid", function(d) {return d.pubid; }) //added pubid attribute to nodes
+        .attr("pubid", function(d) {return d.id; }) //added pubid attribute to nodes
         .attr("xcoord", function(d) {return Math.round(d.x * 100) / 100; })
         .attr("ycoord", function(d) {return Math.round(d.y * 100) / 100; })
         .attr("transform", function(d) { return "translate(" + d.y + "," + d.x + ")"; });
@@ -122,15 +139,23 @@ function update(source) {
     nodeEnter.append("circle")
         .attr("r", 5)
         .attr("r", function(d) { return rScale(d.google_citation_count) })
-        .style("fill", "#fff");
+        .style("fill", "#fff")
+        .on("mouseover", function(d) { 
+            $("#pubinfo")
+            .css({ 'left': d.y + margin.left - 90})
+            .css({ 'top': d.x + margin.top - 135})
+            .css('visibility','visible').hide().fadeIn(); 
+            $("#pubinfo p").html(d.title)
+        })
+        .on("mouseout", function(d) { $("#pubinfo").fadeOut() });
 
-    nodeEnter.append("text")
-        .attr("y", function(d) { 
-            return d.children || d._children ? -20 : -20; })
-        .attr("dy", ".35em")
-        .attr("text-anchor", "middle")
-        .text(function(d) { return d.title; })
-        .style("fill-opacity", 1);
+    // nodeEnter.append("text")
+    //     .attr("y", function(d) { 
+    //         return d.children || d._children ? -20 : -20; })
+    //     .attr("dy", ".35em")
+    //     .attr("text-anchor", "middle")
+    //     .text(function(d) { return d.title; })
+    //     .style("fill-opacity", 1);
 
     // Declare the links…
     var link = svg.selectAll("path.link")

@@ -94,7 +94,7 @@ def viz():
     return render_template("viz.html", 
                             search_text = search_text,
                             search_type = search_type,
-                            data = viz_mod.get_viz_json(pub_id))
+                            data = viz_mod.get_viz_json(1))
 
 @app.route("/submit", methods=["POST"])
 def submit():

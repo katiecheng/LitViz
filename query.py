@@ -4,6 +4,8 @@ import model
 def row2dict(row):
     d = {}
     for column in row.__table__.columns:
+
+        # when possible, convert unicode string to ascii
         if isinstance(getattr(row, column.name), unicode):
             d[column.name] = getattr(row, column.name).encode('utf-8')
         else:
