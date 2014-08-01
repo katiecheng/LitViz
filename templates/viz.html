@@ -6,8 +6,8 @@
     /*node styling*/
     .node circle {
         fill: #fff;
-        stroke: steelblue;
-        stroke-width: 3px;
+        stroke: #33CCCC;
+        stroke-width: 2px;
     }
 
     .node text { font: 12px sans-serif; }
@@ -15,7 +15,7 @@
     .link {
         fill: none;
         stroke: #cccccc;
-        stroke-width: 2px;
+        stroke-width: 2.5px;
     }
 
     .axis text {
@@ -35,11 +35,10 @@
     #pubinfo {
         position: absolute;
         width:190px;
-        height:115px;
         visibility: hidden;
         padding:10px;
         border:2px;
-        border-radius:10px;
+        border-radius:8px;
         border-style:solid;
         border-color:#cccccc;
         background-color: #fff;
@@ -58,20 +57,27 @@
     
 <script>
 
-function tree() {
-var treeData = {{ data|safe }}; //send in json data from litviz.py
+var tree_data = {{ data|safe }}; //send in json data from litviz.py
+console.log(tree_data)
+
+function tree(tree_data) {
+
+var data = tree_data["data"]
+var year_min = tree_data["year_min"]
+var year_max = tree_data["year_max"]
+var citation_min = tree_data["citation_min"]
+var citation_max = tree_data["citation_max"]
 
 var yScale = d3.scale.linear()
-                     .domain([1940, 2020])
+                     .domain([ year_min - 5 , year_max + 5 ])
                      // .domain([d3.min(treeData, function(d) { return d.time; } ), d3.max(treeData, function(d) { return d.time; } ) ])
-                     .range([0, 1125]);
+                     .range([0, 1025]);
 
 var rScale = d3.scale.linear()
-                     // .domain([0,10])
-                     .domain([0, 5
+                     .domain([ citation_min , citation_max
                         // d3.max(treeData, function(d) { return d.relatedness; } ) 
                         ])
-                     .range([2, 10]);
+                     .range([3, 10]);
 
 //Define Y axis
 var yAxis = d3.svg.axis()
@@ -103,7 +109,7 @@ var svg = d3.select("#viz").append("svg")
     .append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-root = treeData[0];
+root = data[0];
     
 update(root);
 
@@ -141,20 +147,62 @@ function update(source) {
         .attr("r", function(d) { return rScale(d.google_citation_count) })
         .style("fill", "#fff")
         .on("mouseover", function(d) { 
+            
             $("#pubinfo")
-            .css({ 'left': d.y + margin.left - 90})
-            .css({ 'top': d.x + margin.top - 135})
-            .css('visibility','visible').hide().fadeIn(); 
-            $("#pubinfo p").html(d.title)
+            .css({ 'left': d.y + margin.left - 220})
+            .css({ 'top': d.x + margin.top })
+            .css('visibility','visible').hide().fadeIn(1000); 
+
+            $("#pubinfo p").html(d.title);
+            
+            var circle = d3.select(this);
+            (function repeat() {
+                circle = circle
+                    .transition()
+                    .duration(1000)
+                    .style("stroke-width", 3)
+                    .style("stroke", "#FFCC00")
+                    .attr("r", rScale(d.google_citation_count) + 7 )
+                    .transition()
+                    .duration(1000)
+                    .attr("r", rScale(d.google_citation_count))
+                    .ease('sine')
+                    .each("end", repeat); })();
         })
-        .on("mouseout", function(d) { $("#pubinfo").fadeOut() });
+        .on("mouseout", function(d) { 
+            $("#pubinfo").fadeOut(500);
+            var circle = d3.select(this);
+            (function () { 
+                circle = circle.transition()
+                    .duration(500)
+                    .style("stroke-width", 2)
+                    .style("stroke", "#33CCCC")
+                    .attr("r", rScale(d.google_citation_count)); })();
+        })
+        .on("dblclick", (function(d) {
+            $.ajax({
+                url: "/update",
+                data: { "pub_id": d.id },
+                success: redrawgraph,
+                dataType: "json"
+            });
+        }) )
+
+    $("div#pubinfo")
+        .mouseover(function () {
+            $(this).stop(true, true).show();
+        })
+        .mouseout(function () {
+            $(this).fadeOut(500);
+        });
+
 
     // nodeEnter.append("text")
     //     .attr("y", function(d) { 
     //         return d.children || d._children ? -20 : -20; })
     //     .attr("dy", ".35em")
     //     .attr("text-anchor", "middle")
-    //     .text(function(d) { return d.title; })
+    //     .text(function(d) { return d.title.slice(0,20)+"..."; })
     //     .style("fill-opacity", 1);
 
     // Declare the links…
@@ -169,7 +217,14 @@ function update(source) {
 } //closes update
 }
 
-tree()
+function redrawgraph(data){
+    $("svg").remove()
+    tree(data)
+    //clear
+    //redraw tree(new_data)
+}
+
+tree(tree_data)
 
 </script>
 

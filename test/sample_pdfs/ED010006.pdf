@@ -1,0 +1,60 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>ERIC - Education Resources Information Center</title><meta name="description" content="ERIC is an online library of education research and information, sponsored by the Institute of Education Sciences (IES) of the U.S. Department of Education."><link rel="shortcut icon" href="favicon.ico" type="image/x-icon" /><link rel="stylesheet" href="css/eric.css?v=0.5" media="all"><link rel="image_src" href="img/icon_fbshare.png"><script type="text/javascript" src="js/jquery-1.9.0.min.js"></script><script type="text/javascript" src="js/respond.min.js"></script><script type="text/javascript" src="js/eric.js?v=0.4"></script>
+    <script type="text/javascript">$(function() {$('#tagline').show();});</script>
+</head>
+<body id="bdyMain">
+	<div id="main" class="index">
+		<div id="actionbar"><a href="?note">Notes</a><a href="?faq">FAQ</a><a href="?contact">Contact Us</a></div><div id="logo"><a href="?" id="aHome" title="ERIC Home"><img src="img/eric_large.png" id="imgLogo" alt="ERIC - Institute of Education Sciences" /></a></div>
+	    <div id="sbar">
+            <form id="f">
+                <div>
+                    <div id="tab1" class="sTab"><span>Collection</span></div>
+                    <div id="tab1b" class="sTab"><a href="#thesaurus">Thesaurus</a></div>
+                    <a id="atips" href="?advanced">Advanced<br />Search Tips</a>
+				    <input id="s" type="text" name="q" placeholder="Search education resources" />
+				    <input type="submit" value="Search" />
+			    </div>
+			    <div id="sopt">
+				    <label><input type="checkbox" name="pr" /> Peer reviewed only</label>
+				    <label><input type="checkbox" name="ft" /> Full text available on ERIC</label>
+				    
+			    </div>
+			    
+			    <div id="tagline"><div style="float:left"><img src="img/eric_50years.gif" alt="50 Years of ERIC" style="margin-right:12px;" /></div><div style="text-align:left;"><div style="font-weight:bold;padding:8px 0;">50 Years of ERIC</div> The Education Resources Information Center (ERIC) is celebrating its 50th Birthday! First opened on May 15th, 1964 ERIC continues the long tradition of ongoing innovation and enhancement.<p style="padding-top:12px"><a href="pdf/ERIC_Retrospective.pdf">Learn more about the history of ERIC here.</a> <img src="img/pdficon_large.png" style="vertical-align:top" alt="PDF icon" /></p></div><div style="clear:both"></div></div>
+            </form>
+            <form id="ft" style="display:none">
+                <div>
+                    <div id="tab2b" class="sTab"><a href="#collection">Collection</a></div>
+                    <div id="tab2" class="sTab"><span>Thesaurus</span></div>
+                    <a id="attips" href="?ti=all">Browse<br />Thesaurus</a>
+                    <input id="st" type="text" name="qt" placeholder="Search thesaurus descriptors" />
+                    <input type="submit" value="Search" />
+                </div>
+			    <div id="soptt">
+				    <label><input type="checkbox" name="ts" /> Include Synonyms</label>
+				    <label><input type="checkbox" name="td" /> Include Dead terms</label>
+			    </div>
+            </form>
+            
+        </div>
+        
+        <div id="r">
+            <div id="rf"></div>
+	        <div id="rr">
+		        
+		        <div id="rrw"></div>
+		        <div id="rrm"></div>
+		        
+	        </div>
+        </div>
+        <div id="i"></div>
+        <div id="divFooter"><div id="ftrPadding"><div id="ftr"><div id="ftrSocial"><a href="pdf/ERIC_Retrospective.pdf" id="eric50"><img src="img/eric_50years.gif" alt="50 Years of ERIC" style="width:32px" width="32" border="0"></a> <a href="http://www.facebook.com/SearchEduResources" id="facebook" style="padding-bottom:5px"><img src="img/icon_facebook.gif" alt="Facebook" width="16" height="16" border="0"></a> <a href="http://www.twitter.com/ERICinfo" id="twitter"><img src="img/icon_twitter.gif" alt="Twitter" width="16" height="16" border="0"></a></div><div id="ftrLogos"><a href="http://www.ed.gov"><img src="img/logo_ed.gif" alt="Department of Education"></a><a href="http://ies.ed.gov"><img src="img/logo_ies.gif" alt="Institute of Education Statistics"></a></div><div id="centerLinks"><a href="?privacy">Privacy</a> | <a href="?copyright">Copyright</a> | <a href="?contact">Contact Us</a> | <a href="?selection">Selection Policy</a><div><a href="?journals">Journals</a> | <a href="?nonjournals">Non-Journals</a> | <a href="?download">Download</a> | <a href="submit">Submit</a></div></div></div></div></div>
+	</div>
+	<script type="text/javascript">//<![CDATA[
+var b=document.getElementsByTagName('body')[0];var s=document.createElement('script');s.type='text/javascript';s.src='/js/federated-analytics.all.min.js';b.appendChild(s);
+	//]]></script>
+</body>
+</html>

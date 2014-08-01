@@ -7,6 +7,7 @@ from flask import session
 import model
 import query
 import viz as viz_mod
+import simplejson as json
 
 # Create a Flask web app
 app = Flask(__name__)
@@ -65,12 +66,12 @@ def results():
         ref_list = [query.get_pub_references(pub["id"]) for pub in query_list]
 
     else:
-        query_list = ['uhg']
+        query_list = ['-']
         pub_list = [0]
-        source_list = ['boo']
-        desc_list = ['no']
-        ref_list = ['stop']
-        auth_list = ['get out']
+        source_list = ['-']
+        desc_list = ['-']
+        ref_list = ['-']
+        auth_list = ['-']
     # [(auth.first_name, auth.middle_name, auth.last_name) for auth in auth_list]
     # desc_phrase = [desc.phrase for desc in desc_list]
     # ref_titles = [ref.title for ref in ref_list]
@@ -91,10 +92,17 @@ def viz():
     search_text = session.get("search_text")
     search_type = session.get("search_type")
     pub_id = session.get("pub_id")
+    pub_data = json.dumps(viz_mod.main(pub_id))
     return render_template("viz.html", 
                             search_text = search_text,
                             search_type = search_type,
-                            data = viz_mod.get_viz_json(1))
+                            data = pub_data)
+
+@app.route("/update")
+def update():
+    pub_id = int(request.args.get("pub_id").encode("utf-8"))
+    pub_data = json.dumps(viz_mod.main(pub_id))
+    return pub_data
 
 @app.route("/submit", methods=["POST"])
 def submit():

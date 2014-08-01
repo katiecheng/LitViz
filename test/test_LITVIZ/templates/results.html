@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% block body %}
+<style>
+    div#entry {
+                margin:1%;
+                margin-bottom:0;
+                padding:1%;
+                border-width:1px;
+                border-style:solid;
+                border-color:black;
+            }
+</style>
+<div id="results">
+    Results from your query "{{ search_text }}" of category "{{ search_type }}"<br>
+    {% for i in range(length) %}
+        <div id = "entry">
+        <!-- <h1>{{ results[i].id }}</h1> -->
+        <!-- <h4>{{ results[i].eric_id }}</h4> -->
+        <h4><a href = {{ results[i].url }} >{{ results[i].title }}</a></h4> 
+        <!-- <h4>{{ results[i].year }}</h4> -->
+        <!-- <h5>{{ sources[i].name }}</h5> -->
+
+        <!-- <h4>Authors: </h4> -->
+        <h5>{% for author in authors[i] %}
+
+        - {{ author["last_name"] }}, {{ author["first_name"] }} {{ author["middle_name"] }} - 
+
+        {% endfor %}</h5>
+
+        <h5>{{ results[i].full_desc }}</h5>
+
+        <!-- <h4>Descriptors: </h4> -->
+        <h5>{% for desc in descriptors[i] %}
+        - {{ desc["phrase"] }} -
+        {% endfor %}</h5>
+
+        <!-- <h4>References: </h4>
+        {% for ref in references[i] %}
+        <h5>{{ref["title"]}}</h5>
+        {% endfor %} -->
+        <form id="form" action="/submit" method="POST">
+        <input type="hidden" name="hidden_id" value="{{ publist[i] }}">
+        <input id="{{ publist[i] }}" class="vizbutton" type="submit" value="Visualize Data!" name="viz_button"/>
+        </form>
+    </div>
+
+    {% endfor %}
+</div>
+
+{% endblock %}
