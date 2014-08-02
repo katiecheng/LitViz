@@ -1,5 +1,5 @@
 #!/bin/bash
-for file in /Volumes/Backup_Katie_MacAir/Scraper2/*.pdf; do 
+for file in /Volumes/Backup_Katie_MacAir/Scraper4/*.pdf; do 
 	pub_id=${file%.*};
 	echo $pub_id;
 	text=$(pdf2txt.py ${pub_id}.pdf);

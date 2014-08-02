@@ -21,14 +21,11 @@ def cycle():
         'Dec':12, 'December':12
     }
 
-    for group in range(2406,16526, 5):
+    for group in range(16501,16526, 5):
     # for group in range(1,5,5):
         print "----------------",group,"----------------"
 
         for page in range(group, group+5):
-
-            # wait two seconds between every page request
-            # time.sleep(2)
 
             url = "http://eric.ed.gov/?q=education&ft=on&pg=%d" %page
             print url
@@ -39,6 +36,9 @@ def cycle():
 
             # process each of the 15 publications on a given search results page
             for i in range(0,15):
+
+                # wait two seconds between every page request
+                time.sleep(2)
 
                 current_pub = publications.eq(i)
 
@@ -80,6 +80,13 @@ def cycle():
                     source = auth_src_yr_split[0][:-6].encode('ascii', 'replace')
                     year = auth_src_yr_split[0][-4:].encode('ascii', 'replace')
 
+                try:
+                    int(year)
+                    print eric_id, year
+                except ValueError:
+                    print eric_id, "year is not an integer"
+                    continue
+
                 # pull the full description from the detailed pub page
                 # get rid of weird \r\n formatting
                 u_deep_desc = deep_html.find('.abstract').text()
@@ -92,6 +99,16 @@ def cycle():
                 deep_descriptors_html = str(deep_html.find('.keywords').find('a'))
                 pattern = r"<a href=.*?>(.*?)</a>"
                 deep_descriptors = re.findall(pattern, deep_descriptors_html)
+
+                # pull citation count from detailed pub page
+                deep_citation_html = str(deep_html.find('div#r_colR'))
+                pattern = r"<div><strong>Reference Count:</strong> (.*?)</div>"
+                deep_citation_count_raw = re.findall(pattern, deep_citation_html)[0]
+                
+                try:
+                    deep_citation_count = int(deep_citation_count_raw)
+                except ValueError:
+                    deep_citation_count = 0
 
                 # pull volume, issue, page, and month from detailed pub page
                 deep_info = deep_html('.r_a').text().encode('ascii', 'replace')
@@ -147,6 +164,7 @@ def cycle():
                 pub_dict["year"] = year
                 pub_dict["full_desc"] = deep_desc[:5000]
                 pub_dict["descriptors"] = deep_descriptors
+                pub_dict["citation_count"] = deep_citation_count
 
                 # add the publication entry (and all related info) to DB
                 update.add_source(source[:100])

@@ -35,6 +35,8 @@ def add_publication(pub_dict):
         new_pub.source_id = int(source_id)
         new_pub.full_desc = pub_dict["full_desc"]
         new_pub.url = pub_dict["url"]
+        new_pub.citation_count = pub_dict["citation_count"]
+        print new_pub.citation_count
         # new_pub.abstract = pub_dict["abstract"]
         if pub_dict.get("month"):
             new_pub.month = int(pub_dict["month"])

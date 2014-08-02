@@ -39,7 +39,7 @@ def results():
         ref_list = [test_query.get_pub_references(pub["id"]) for pub in query_list]
 
     elif search_type == "Author":
-        auth_list = test_model.session.query(model.Author
+        auth_list = test_model.session.query(test_model.Author
             ).filter(test_model.Author.last_name.ilike("%" + search_text + "%")
             ).all()
 

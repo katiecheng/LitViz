@@ -65,8 +65,6 @@ def get_viz_data(pub_id):
     # once you've exhausted the ability to interleave, append the rest of the longer list
     diff = max(num_refs, num_ref_bys) - min(num_refs, num_ref_bys)
 
-    print pub_dict
-
     for i in range(min(num_refs, num_ref_bys), max(num_refs, num_ref_bys)):
         if num_refs > num_ref_bys:
             pub_dict['children'].append(ref_dicts[i])

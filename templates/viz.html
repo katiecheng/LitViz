@@ -62,166 +62,158 @@ console.log(tree_data)
 
 function tree(tree_data) {
 
-var data = tree_data["data"]
-var year_min = tree_data["year_min"]
-var year_max = tree_data["year_max"]
-var citation_min = tree_data["citation_min"]
-var citation_max = tree_data["citation_max"]
+    var data = tree_data["data"]
+    var year_min = tree_data["year_min"]
+    var year_max = tree_data["year_max"]
+    var citation_min = tree_data["citation_min"]
+    var citation_max = tree_data["citation_max"]
 
-var yScale = d3.scale.linear()
-                     .domain([ year_min - 5 , year_max + 5 ])
-                     // .domain([d3.min(treeData, function(d) { return d.time; } ), d3.max(treeData, function(d) { return d.time; } ) ])
-                     .range([0, 1025]);
+    var xScale = d3.scale.linear()
+                         .domain([ year_min - 5 , year_max + 5 ])
+                         .range([0, 1025]);
 
-var rScale = d3.scale.linear()
-                     .domain([ citation_min , citation_max
-                        // d3.max(treeData, function(d) { return d.relatedness; } ) 
-                        ])
-                     .range([3, 10]);
+    var rScale = d3.scale.linear()
+                         .domain([ citation_min , citation_max ])
+                         .range([3, 10]);
 
-//Define Y axis
-var yAxis = d3.svg.axis()
-                  .scale(yScale)
-                  .orient("bottom")
-                  .tickFormat(d3.format("d")) //change tick format to remove commas
-                  .tickSize(550)
-                  // .ticks([5])
-                  
+    //Define X axis
+    var xAxis = d3.svg.axis()
+                      .scale(xScale)
+                      .orient("bottom")
+                      .tickFormat(d3.format("d")) //change tick format to remove commas
+                      .tickSize(550)
+                      
 
-// ************** Generate the tree diagram  *****************
-var margin = {top: 25, right: 50, bottom: 25, left: 50},
-    // width = $("#viz").width
-    width = 600 - margin.right - margin.left,
-    height = 1125 - margin.top - margin.bottom;
+    // ************** Generate the tree diagram  *****************
+    var margin = {top: 25, right: 50, bottom: 25, left: 50},
+        // height = $("#viz").height
+        height = 600 - margin.right - margin.left,
+        width = 1125 - margin.top - margin.bottom;
 
-    
-var i = 0;
+    var i = 0;
 
-var tree = d3.layout.tree()
-    .size([width, height]);
+    var tree = d3.layout.tree()
+        .size([height, width]);
 
-var diagonal = d3.svg.diagonal()
-    .projection(function(d) { return [d.y, d.x]; });
+    var diagonal = d3.svg.diagonal()
+        .projection(function(d) { return [d.y, d.x]; });
 
-var svg = d3.select("#viz").append("svg")
-    .attr("width", width + margin.right + margin.left)
-    .attr("height", height + margin.top + margin.bottom)
-    .append("g")
-    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+    var svg = d3.select("#viz").append("svg")
+        .attr("width", width + margin.top + margin.bottom)
+        .attr("height", height + margin.right + margin.left)
+        .append("g")
+        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-root = data[0];
-    
-update(root);
+    root = data[0];
+        
+    update(root);
 
-$("svg").width("100%");
-$("svg").height("100%");
+    $("svg").width("100%");
+    $("svg").height("100%");
 
-function update(source) {
+    function update(source) {
 
-    //Create Y axis
-    svg.append("g")
-        .attr("class", "axis")
-        .call(yAxis);
+        //Create Y axis
+        svg.append("g")
+            .attr("class", "axis")
+            .call(xAxis);
 
-    // Compute the new tree layout.
-    var nodes = tree.nodes(root).reverse(),
-        links = tree.links(nodes);
+        // Compute the new tree layout.
+        var nodes = tree.nodes(root).reverse(),
+            links = tree.links(nodes);
 
-    // Normalize for fixed-depth.
-    nodes.forEach(function(d) { d.y = yScale(d.year) ; });
+        // Normalize for fixed-depth.
+        nodes.forEach(function(d) { d.y = xScale(d.year) ; });
 
-    // Declare the nodes…
-    var node = svg.selectAll("g.node")
-        .data(nodes, function(d) { return d.id || (d.id = ++i); });
+        // Declare the nodes…
+        var node = svg.selectAll("g.node")
+            .data(nodes, function(d) { return d.id || (d.id = ++i); });
 
-    // Enter the nodes.
-    var nodeEnter = node.enter().append("g")
-        .attr("class", "node")
-        .attr("pubid", function(d) {return d.id; }) //added pubid attribute to nodes
-        .attr("xcoord", function(d) {return Math.round(d.x * 100) / 100; })
-        .attr("ycoord", function(d) {return Math.round(d.y * 100) / 100; })
-        .attr("transform", function(d) { return "translate(" + d.y + "," + d.x + ")"; });
+        // Enter the nodes.
+        var nodeEnter = node.enter().append("g")
+            .attr("class", "node")
+            .attr("pubid", function(d) {return d.id; }) //added pubid attribute to nodes
+            .attr("xcoord", function(d) {return Math.round(d.x * 100) / 100; })
+            .attr("ycoord", function(d) {return Math.round(d.y * 100) / 100; })
+            .attr("transform", function(d) { return "translate(" + d.y + "," + d.x + ")"; });
 
-    nodeEnter.append("circle")
-        .attr("r", 5)
-        .attr("r", function(d) { return rScale(d.google_citation_count) })
-        .style("fill", "#fff")
-        .on("mouseover", function(d) { 
-            
-            $("#pubinfo")
-            .css({ 'left': d.y + margin.left - 220})
-            .css({ 'top': d.x + margin.top })
-            .css('visibility','visible').hide().fadeIn(1000); 
+        nodeEnter.append("circle")
+            .attr("r", 5)
+            .attr("r", function(d) { return rScale(d.citation_count) })
+            .style("fill", "#fff")
+            .on("mouseover", function(d) { 
+                
+                $("#pubinfo")
+                .css({ 'left': d.y + margin.left - 220})
+                .css({ 'top': d.x + margin.top })
+                .css('visibility','visible').hide().fadeIn(1000); 
 
-            $("#pubinfo p").html(d.title);
-            
-            var circle = d3.select(this);
-            (function repeat() {
-                circle = circle
-                    .transition()
-                    .duration(1000)
-                    .style("stroke-width", 3)
-                    .style("stroke", "#FFCC00")
-                    .attr("r", rScale(d.google_citation_count) + 7 )
-                    .transition()
-                    .duration(1000)
-                    .attr("r", rScale(d.google_citation_count))
-                    .ease('sine')
-                    .each("end", repeat); })();
-        })
-        .on("mouseout", function(d) { 
-            $("#pubinfo").fadeOut(500);
-            var circle = d3.select(this);
-            (function () { 
-                circle = circle.transition()
-                    .duration(500)
-                    .style("stroke-width", 2)
-                    .style("stroke", "#33CCCC")
-                    .attr("r", rScale(d.google_citation_count)); })();
-        })
-        .on("dblclick", (function(d) {
-            $.ajax({
-                url: "/update",
-                data: { "pub_id": d.id },
-                success: redrawgraph,
-                dataType: "json"
+                $("#pubinfo p").html(d.title);
+                
+                var circle = d3.select(this);
+                (function repeat() {
+                    circle = circle
+                        .transition()
+                        .duration(1000)
+                        .style("stroke-width", 3)
+                        .style("stroke", "#FFCC00")
+                        .attr("r", rScale(d.citation_count) + 7 )
+                        .transition()
+                        .duration(1000)
+                        .attr("r", rScale(d.citation_count))
+                        .ease('sine')
+                        .each("end", repeat); })();
+            })
+            .on("mouseout", function(d) { 
+                $("#pubinfo").fadeOut(500);
+                var circle = d3.select(this);
+                (function () { 
+                    circle = circle.transition()
+                        .duration(500)
+                        .style("stroke-width", 2)
+                        .style("stroke", "#33CCCC")
+                        .attr("r", rScale(d.citation_count)); })();
+            })
+            .on("dblclick", (function(d) {
+                $.ajax({
+                    url: "/update",
+                    data: { "pub_id": d.id },
+                    success: redrawgraph,
+                    dataType: "json"
+                });
+            }) )
+
+        $("div#pubinfo")
+            .mouseover(function () {
+                $(this).stop(true, true).show();
+            })
+            .mouseout(function () {
+                $(this).fadeOut(500);
             });
-        }) )
 
-    $("div#pubinfo")
-        .mouseover(function () {
-            $(this).stop(true, true).show();
-        })
-        .mouseout(function () {
-            $(this).fadeOut(500);
-        });
+        // nodeEnter.append("text")
+        //     .attr("y", function(d) { 
+        //         return d.children || d._children ? -20 : -20; })
+        //     .attr("dy", ".35em")
+        //     .attr("text-anchor", "middle")
+        //     .text(function(d) { return d.title.slice(0,20)+"..."; })
+        //     .style("fill-opacity", 1);
 
+        // Declare the links…
+        var link = svg.selectAll("path.link")
+            .data(links, function(d) { return d.target.id; });
 
-    // nodeEnter.append("text")
-    //     .attr("y", function(d) { 
-    //         return d.children || d._children ? -20 : -20; })
-    //     .attr("dy", ".35em")
-    //     .attr("text-anchor", "middle")
-    //     .text(function(d) { return d.title.slice(0,20)+"..."; })
-    //     .style("fill-opacity", 1);
+        // Enter the links.
+        link.enter().insert("path", "g")
+            .attr("class", "link")
+            .attr("d", diagonal);
 
-    // Declare the links…
-    var link = svg.selectAll("path.link")
-        .data(links, function(d) { return d.target.id; });
-
-    // Enter the links.
-    link.enter().insert("path", "g")
-        .attr("class", "link")
-        .attr("d", diagonal);
-
-} //closes update
+    } //closes update
 }
 
 function redrawgraph(data){
-    $("svg").remove()
-    tree(data)
-    //clear
-    //redraw tree(new_data)
+    $("svg").remove() //clear
+    tree(data) //redraw tree with new data
 }
 
 tree(tree_data)

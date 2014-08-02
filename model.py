@@ -49,6 +49,7 @@ class Publication(Base):
     issue = Column(Integer)
     start_page = Column(Integer)
     end_page = Column(Integer)
+    citation_count = Column(Integer)
 
     journal = relationship("Journal", 
         backref = backref("publications", order_by=id))
