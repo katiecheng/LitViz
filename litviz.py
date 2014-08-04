@@ -30,7 +30,8 @@ def results():
     search_type = session.get("search_type")
 
     if search_type == "Title":
-        query_list = query.get_pubs(search_text, "title")
+        index = 0
+        query_list = query.get_pubs(search_text, "title", index)
 
         pub_list = [pub["id"] for pub in query_list]
         source_list = [query.get_pub_source(pub["id"]) for pub in query_list]
@@ -57,7 +58,8 @@ def results():
         ref_list = [query.get_pub_references(pub["id"]) for pub in query_list]
 
     elif search_type == "Keyword":
-        query_list = query.get_pubs(search_text, "full_desc")
+        index = 0
+        query_list = query.get_pubs(search_text, "full_desc", index)
 
         pub_list = [pub["id"] for pub in query_list]
         source_list = [query.get_pub_source(pub["id"]) for pub in query_list]
@@ -72,9 +74,6 @@ def results():
         desc_list = ['-']
         ref_list = ['-']
         auth_list = ['-']
-    # [(auth.first_name, auth.middle_name, auth.last_name) for auth in auth_list]
-    # desc_phrase = [desc.phrase for desc in desc_list]
-    # ref_titles = [ref.title for ref in ref_list]
 
     return render_template("results.html", 
                             search_text = search_text,
@@ -97,6 +96,10 @@ def viz():
                             search_text = search_text,
                             search_type = search_type,
                             data = pub_data)
+
+@app.route("/lazyload")
+def lazyload():
+    pass
 
 @app.route("/update")
 def update():

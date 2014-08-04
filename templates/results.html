@@ -1,50 +1,84 @@
 {% extends 'base.html' %}
 {% block body %}
+
 <style>
+
     div#entry {
-                margin:1%;
-                margin-bottom:0;
-                padding:1%;
-                border-width:1px;
-                border-style:solid;
-                border-color:black;
-            }
+        margin:1%;
+        margin-top:2%;
+        margin-bottom:2%;
+        padding-top:0.5%;
+        padding-bottom:0.5%;
+        padding-right:2%;
+        padding-left:2%;
+        background-color: #b0b0b0;
+        border-radius: 10px;
+    }
+
+    a:link {
+        color: #008989;
+        text-decoration: none;
+    }
+
+    a:hover {
+        text-decoration: underline;
+    }
+
 </style>
+
 <div id="results">
     Results from your query "{{ search_text }}" of category "{{ search_type }}"<br>
+    
     {% for i in range(length) %}
+    
         <div id = "entry">
-        <!-- <h1>{{ results[i].id }}</h1> -->
-        <!-- <h4>{{ results[i].eric_id }}</h4> -->
-        <h4><a href = {{ results[i].url }} >{{ results[i].title }}</a></h4> 
-        <!-- <h4>{{ results[i].year }}</h4> -->
-        <!-- <h5>{{ sources[i].name }}</h5> -->
 
-        <!-- <h4>Authors: </h4> -->
-        <h5>{% for author in authors[i] %}
+            <h4><a href = {{ results[i].url }} >{{ results[i].title }}</a></h4> 
 
-        - {{ author["last_name"] }}, {{ author["first_name"] }} {{ author["middle_name"] }} - 
+            <p>{% for author in authors[i] %}
+            <strong>{{ author["last_name"] }}, {{ author["first_name"] }} {{ author["middle_name"] }};</strong>
+            {% endfor %}</p>
 
-        {% endfor %}</h5>
+            <p>{{ results[i].full_desc }}</p>
 
-        <h5>{{ results[i].full_desc }}</h5>
+            <p>{% for desc in descriptors[i] %}
+            {{ desc["phrase"] }};
+            {% endfor %}</p>
 
-        <!-- <h4>Descriptors: </h4> -->
-        <h5>{% for desc in descriptors[i] %}
-        - {{ desc["phrase"] }} -
-        {% endfor %}</h5>
+            <form id="form" action="/submit" method="POST">
+                <input type="hidden" name="hidden_id" value="{{ publist[i] }}">
+                <input id="{{ publist[i] }}" class="vizbutton" type="submit" value="Visualize Data!" name="viz_button"/>
+            </form>
 
-        <!-- <h4>References: </h4>
-        {% for ref in references[i] %}
-        <h5>{{ref["title"]}}</h5>
-        {% endfor %} -->
-        <form id="form" action="/submit" method="POST">
-        <input type="hidden" name="hidden_id" value="{{ publist[i] }}">
-        <input id="{{ publist[i] }}" class="vizbutton" type="submit" value="Visualize Data!" name="viz_button"/>
-        </form>
-    </div>
-
+        </div>
+    
     {% endfor %}
+
 </div>
+
+<script>
+
+    $(function($) {
+    $('#results').bind('scroll', function() {
+        if($(this).scrollTop() + $(this).innerHeight() >= this.scrollHeight) {
+            alert('end reached');
+            }
+        })
+    });
+
+                $.ajax({
+                    url: "/update",
+                    data: { "pub_id": d.id },
+                    success: redrawgraph,
+                    dataType: "json"
+                });
+                    $.ajax({
+                    url: "/lazyload",
+                    data: { "pub_id": d.id },
+                    success: (function(data){ $("#results").append(); }),
+                    dataType: "json"
+                });
+
+</script>
 
 {% endblock %}

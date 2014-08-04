@@ -74,6 +74,19 @@
                 background-color:#FFCC00;
                 outline:0;
             }*/
+            div#litvizgif {
+                position:absolute;
+                left:50%;
+                margin-left:-100px;
+                top:65%;
+                width:200px;
+                height:200px;
+                opacity: .9;
+                visibility: hidden;
+            }
+            img#litvizgif {
+                height:200px
+            }
         </style>
     </head>
     <body>
@@ -96,8 +109,19 @@
                     <!-- <input id="vizbutton" type="submit" value="Visualize Data!" name="viz_button"/> -->
             </div>
         </form>
-    </body>
-    <script type="text/javascript">
+        <div id="litvizgif">
+            <img id="litvizgif" src="static/litvizgif_basic.gif">
+        </div>
 
+    <script>
+        $(document).ready(function () {
+            $("#form")
+                .submit(function (event) {
+                    $("div#litvizgif").css("visibility", "visible");
+                    console.log('showdya');
+                })
+        })
     </script>
+
+    </body>
 </html>

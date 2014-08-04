@@ -44,10 +44,40 @@
         background-color: #fff;
         opacity:0.75;
     }
+    div#gifback {
+        position:absolute;
+        left:50%;
+        margin-left:-100px;
+        top:30%;
+        width:200px;
+        height:200px;
+        opacity: 0.80;
+        border-radius: 10px;
+        background-color: #fff;
+        /*visibility: hidden;*/
+    }
+    div#litvizgif {
+        position:absolute;
+        left:50%;
+        margin-left:-100px;
+        top:30%;
+        width:200px;
+        height:200px;
+        opacity: 0.9;
+        /*visibility: hidden;*/
+    }
+    img#litvizgif {
+        height:200px
+    }
 
 </style>
 
 <div id="viz">
+    <div id="gifback">
+    </div>
+    <div id="litvizgif">
+        <img id="litvizgif" src="static/litvizgif_basic.gif">
+    </div>
     <div id="pubinfo">
         <p></p>
     </div>
@@ -61,6 +91,8 @@ var tree_data = {{ data|safe }}; //send in json data from litviz.py
 console.log(tree_data)
 
 function tree(tree_data) {
+    $("div#gifback").show()
+    $("div#litvizgif").show()
 
     var data = tree_data["data"]
     var year_min = tree_data["year_min"]
@@ -74,7 +106,7 @@ function tree(tree_data) {
 
     var rScale = d3.scale.linear()
                          .domain([ citation_min , citation_max ])
-                         .range([3, 10]);
+                         .range([3, 20]);
 
     //Define X axis
     var xAxis = d3.svg.axis()
@@ -117,6 +149,8 @@ function tree(tree_data) {
         svg.append("g")
             .attr("class", "axis")
             .call(xAxis);
+
+        $("svg").hide();
 
         // Compute the new tree layout.
         var nodes = tree.nodes(root).reverse(),
@@ -174,13 +208,16 @@ function tree(tree_data) {
                         .style("stroke", "#33CCCC")
                         .attr("r", rScale(d.citation_count)); })();
             })
-            .on("dblclick", (function(d) {
+            .on("click", (function(d) {
+                $("#pubinfo").hide();
+                $("div#litvizgif").show();
                 $.ajax({
                     url: "/update",
                     data: { "pub_id": d.id },
                     success: redrawgraph,
                     dataType: "json"
                 });
+                $("div#litvizgif").hide();
             }) )
 
         $("div#pubinfo")
@@ -209,6 +246,10 @@ function tree(tree_data) {
             .attr("d", diagonal);
 
     } //closes update
+    $("div#gifback").fadeOut(2000);
+    $("div#litvizgif").fadeOut(2000);
+    $("svg").fadeIn(3000);
+
 }
 
 function redrawgraph(data){

@@ -52,18 +52,37 @@ def get_pub(pub_id):
     pub = session.query(model.Publication).get(pub_id)
     return row2dict(pub)
 
-def get_pubs(search_text, column):
+def get_pubs(search_text, column, index):
     session = model.session 
     if column == "title":
-        pubs = session.query(model.Publication
-            ).filter(model.Publication.title.ilike("%" + search_text + "%")).limit(10)
+        pubs = (session.query(model.Publication)
+                .filter(model.Publication.title.ilike("%" + search_text + "%"))
+                .order_by(model.Publication.id)
+                .slice(index, index+10))
     elif column == "full_desc":
-        pubs = session.query(model.Publication
-            ).filter(model.Publication.full_desc.ilike("% " + search_text + " %")).limit(10)
+        pubs = (session.query(model.Publication)
+                .filter(model.Publication.full_desc.ilike("% " + search_text + " %"))
+                .order_by(model.Publication.id)
+                .slice(index, index+10))
     pub_dicts = []
     for pub in pubs:
         pub_dicts.append(row2dict(pub))
     return pub_dicts
+
+def get_pubs_count(search_text, column):
+    session = model.session 
+    if column == "title":
+        pubs = (session.query(model.Publication)
+                .filter(model.Publication
+                .title.ilike("%" + search_text + "%")))
+        count = pubs.count()
+    elif column == "full_desc":
+        pubs = (session.query(model.Publication)
+                .filter(model.Publication
+                .full_desc.ilike("% " + search_text + " %")))
+        count = pubs.count()
+    return count
+
 
 def get_pub_authors(pub_id):
     session = model.session
