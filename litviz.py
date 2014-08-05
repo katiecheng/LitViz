@@ -30,61 +30,40 @@ def results():
     search_type = session.get("search_type")
 
     if search_type == "Title":
-        index = 0
-        query_list = query.get_pubs(search_text, "title", index)
-
-        pub_list = [pub["id"] for pub in query_list]
-        source_list = [query.get_pub_source(pub["id"]) for pub in query_list]
-        auth_list = [query.get_pub_authors(pub["id"]) for pub in query_list]
-        desc_list = [query.get_pub_descriptors(pub["id"]) for pub in query_list]
-        ref_list = [query.get_pub_references(pub["id"]) for pub in query_list]
+        offset = 0
+        query_list = query.get_pubs(search_text, "title", offset)
+        query_count = query.get_pubs_count(search_text, "title")
 
     elif search_type == "Author":
-        auth_list = model.session.query(model.Author
-            ).filter(model.Author.last_name.ilike("%" + search_text + "%")
-            ).all()
+        auth_list = (model.session.query(model.Author)
+                    .filter(model.Author.last_name.ilike("%" + search_text + "%"))
+                    .all())
 
         auth_id_list = [auth.id for auth in auth_list]
         auth_pubs_list = [query.get_auth_publications(auth_id) for auth_id in auth_id_list]
+
         query_list = []
         for auth_pubs in auth_pubs_list:
             for auth_pub in auth_pubs:
                 query_list.append(auth_pub)
 
-        pub_list = [pub["id"] for pub in query_list]
-        source_list = [query.get_pub_source(pub["id"]) for pub in query_list]
-        auth_list = [query.get_pub_authors(pub["id"]) for pub in query_list]
-        desc_list = [query.get_pub_descriptors(pub["id"]) for pub in query_list]
-        ref_list = [query.get_pub_references(pub["id"]) for pub in query_list]
+        query_count = len(query_list)
 
     elif search_type == "Keyword":
-        index = 0
-        query_list = query.get_pubs(search_text, "full_desc", index)
-
-        pub_list = [pub["id"] for pub in query_list]
-        source_list = [query.get_pub_source(pub["id"]) for pub in query_list]
-        auth_list = [query.get_pub_authors(pub["id"]) for pub in query_list]
-        desc_list = [query.get_pub_descriptors(pub["id"]) for pub in query_list]
-        ref_list = [query.get_pub_references(pub["id"]) for pub in query_list]
+        offset = 0
+        query_list = query.get_pubs(search_text, "full_desc", offset)
+        query_count = query.get_pubs_count(search_text, "full_desc")
 
     else:
-        query_list = ['-']
-        pub_list = [0]
-        source_list = ['-']
-        desc_list = ['-']
-        ref_list = ['-']
-        auth_list = ['-']
+        query_list = []
+        query_count = 0
 
     return render_template("results.html", 
                             search_text = search_text,
                             search_type = search_type,
                             length = len(query_list),
                             results = query_list,
-                            publist = pub_list,
-                            sources = source_list,
-                            authors = auth_list,
-                            descriptors = desc_list,
-                            references = ref_list)
+                            count = query_count)
 
 @app.route("/viz", methods=["GET","POST"])
 def viz():
@@ -99,7 +78,31 @@ def viz():
 
 @app.route("/lazyload")
 def lazyload():
-    pass
+    search_text = session.get("search_text")
+    search_type = session.get("search_type")
+    offset = int(request.args.get("offset").encode("utf-8"))
+    print offset
+    if offset == 0:
+        return
+    if search_type == "Title":
+        query_list = query.get_pubs(search_text, "title", offset)
+    elif search_type == "Author":
+        auth_list = (model.session.query(model.Author)
+                    .filter(model.Author.last_name.ilike("%" + search_text + "%"))
+                    .all())
+        if auth_list != None:
+            auth_id_list = [auth.id for auth in auth_list]
+        else:
+            auth_id_list = []
+        auth_pubs_list = [query.get_auth_publications(auth_id) for auth_id in auth_id_list]
+
+        query_list = []
+        for auth_pubs in auth_pubs_list:
+            for auth_pub in auth_pubs:
+                query_list.append(auth_pub)
+    elif search_type == "Keyword":
+        query_list = query.get_pubs(search_text, "full_desc", offset)
+    return json.dumps(query_list)
 
 @app.route("/update")
 def update():
@@ -114,8 +117,6 @@ def submit():
         session["search_type"] = request.form.get("search_type")
         return redirect ("/results")
     elif request.form.get("viz_button"):
-        session["search_text"] = request.form.get("search_text")
-        session["search_type"] = request.form.get("search_type")
         session["pub_id"] = request.form.get("hidden_id")
         return redirect ("/viz")
 

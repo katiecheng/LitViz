@@ -2,7 +2,6 @@
 {% block body %}
 
 <style>
-
     div#entry {
         margin:1%;
         margin-top:2%;
@@ -14,40 +13,37 @@
         background-color: #b0b0b0;
         border-radius: 10px;
     }
-
+    div#message {
+        margin-left: 15px;
+    }
     a:link {
         color: #008989;
         text-decoration: none;
     }
-
     a:hover {
         text-decoration: underline;
     }
-
 </style>
 
 <div id="results">
-    Results from your query "{{ search_text }}" of category "{{ search_type }}"<br>
+    <div id="message"><b>{{ count }}</b> results for your query <u>{{ search_text }}</u> of category <u>{{ search_type }}</u></div>
+
+    <input id="offset" type="hidden" name="offset" value="1"/>
     
     {% for i in range(length) %}
     
         <div id = "entry">
 
-            <h4><a href = {{ results[i].url }} >{{ results[i].title }}</a></h4> 
+            <h4 class="title" ><a href = {{ results[i].url }} >{{ results[i].title }}</a></h4> 
 
-            <p>{% for author in authors[i] %}
-            <strong>{{ author["last_name"] }}, {{ author["first_name"] }} {{ author["middle_name"] }};</strong>
-            {% endfor %}</p>
 
+            <p><b>{{ results[i].authors }}</b></p>
             <p>{{ results[i].full_desc }}</p>
-
-            <p>{% for desc in descriptors[i] %}
-            {{ desc["phrase"] }};
-            {% endfor %}</p>
+            <p>{{ results[i].descriptors }}</p>
 
             <form id="form" action="/submit" method="POST">
-                <input type="hidden" name="hidden_id" value="{{ publist[i] }}">
-                <input id="{{ publist[i] }}" class="vizbutton" type="submit" value="Visualize Data!" name="viz_button"/>
+                <input type="hidden" name="hidden_id" value="{{ results[i].pub_id }}">
+                <input id="{{ results[i].pub_id }}" class="vizbutton" type="submit" value="Visualize Data!" name="viz_button"/>
             </form>
 
         </div>
@@ -58,26 +54,34 @@
 
 <script>
 
-    $(function($) {
     $('#results').bind('scroll', function() {
         if($(this).scrollTop() + $(this).innerHeight() >= this.scrollHeight) {
-            alert('end reached');
+                $.ajax({
+                    url: "/lazyload",
+                    data: { "offset": $("#offset").val() },
+                    success: append_entry,
+                    dataType: "json"
+                });
             }
         })
-    });
 
-                $.ajax({
-                    url: "/update",
-                    data: { "pub_id": d.id },
-                    success: redrawgraph,
-                    dataType: "json"
-                });
-                    $.ajax({
-                    url: "/lazyload",
-                    data: { "pub_id": d.id },
-                    success: (function(data){ $("#results").append(); }),
-                    dataType: "json"
-                });
+    function append_entry(list_json){
+        $("#offset").val(parseInt($("#offset").val()) + 1)
+        $.each(list_json, function(i,json) {
+            var div = "<div id = 'entry'>";
+            div += "<h4><a href = " + json['url'] + ">" + json['title'] + "</a></h4>";
+            div += "<p><b>" + json['authors'] + "</b></p>";
+            div += "<p>" + json['full_desc'] + "</p>";
+            div += "<p>" + json['descriptors'] + "</p>";
+            div += "<form id='form' action='/submit' method='POST'>";
+            div += "<input type='hidden' name='hidden_id' value=" + json['pub_id'] + ">";
+            div += "<input id=" + json['pub_id'] + " class='vizbutton' type='submit' value='Visualize Data!' name='viz_button'/>";
+            div += "</form>";
+            div += "</div>";
+            $("#results").append(div);
+        })
+    }
+
 
 </script>
 

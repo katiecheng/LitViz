@@ -117,7 +117,7 @@
         $(document).ready(function () {
             $("#form")
                 .submit(function (event) {
-                    $("div#litvizgif").css("visibility", "visible");
+                    $("div#litvizgif").hide().css("visibility", "visible").fadeIn(100);
                     console.log('showdya');
                 })
         })

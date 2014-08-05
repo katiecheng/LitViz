@@ -88,7 +88,6 @@
 <script>
 
 var tree_data = {{ data|safe }}; //send in json data from litviz.py
-console.log(tree_data)
 
 function tree(tree_data) {
     $("div#gifback").show()
@@ -182,7 +181,7 @@ function tree(tree_data) {
                 .css({ 'top': d.x + margin.top })
                 .css('visibility','visible').hide().fadeIn(1000); 
 
-                $("#pubinfo p").html(d.title);
+                $("#pubinfo p").html(d.title+"<div><p><a href="+d.url+">Link to PDF</a></p></div>");
                 
                 var circle = d3.select(this);
                 (function repeat() {
@@ -253,8 +252,8 @@ function tree(tree_data) {
 }
 
 function redrawgraph(data){
-    $("svg").remove() //clear
-    tree(data) //redraw tree with new data
+    $("svg").remove(); //clear
+    tree(data); //redraw tree with new data
 }
 
 tree(tree_data)

@@ -52,23 +52,6 @@ def get_pub(pub_id):
     pub = session.query(model.Publication).get(pub_id)
     return row2dict(pub)
 
-def get_pubs(search_text, column, index):
-    session = model.session 
-    if column == "title":
-        pubs = (session.query(model.Publication)
-                .filter(model.Publication.title.ilike("%" + search_text + "%"))
-                .order_by(model.Publication.id)
-                .slice(index, index+10))
-    elif column == "full_desc":
-        pubs = (session.query(model.Publication)
-                .filter(model.Publication.full_desc.ilike("% " + search_text + " %"))
-                .order_by(model.Publication.id)
-                .slice(index, index+10))
-    pub_dicts = []
-    for pub in pubs:
-        pub_dicts.append(row2dict(pub))
-    return pub_dicts
-
 def get_pubs_count(search_text, column):
     session = model.session 
     if column == "title":
@@ -83,6 +66,39 @@ def get_pubs_count(search_text, column):
         count = pubs.count()
     return count
 
+def get_pubs(search_text, column, index):
+    session = model.session 
+    if column == "title":
+        pubs = (session.query(model.Publication)
+                .filter(model.Publication.title.ilike("%" + search_text + "%"))
+                .order_by(model.Publication.id)
+                .slice(index*10, index*10+10))
+    elif column == "full_desc":
+        pubs = (session.query(model.Publication)
+                .filter(model.Publication.full_desc.ilike("% " + search_text + " %"))
+                .order_by(model.Publication.id)
+                .slice(index*10, index*10+10))
+    pub_dicts = []
+    for pub in pubs:
+        pub_dict = PubResultsInfo(pub.id, pub.title, pub.url, pub.full_desc).__dict__
+        pub_dicts.append(pub_dict)
+    return pub_dicts
+
+class PubResultsInfo(object):
+    pub_id = 0
+    title = ""
+    url = ""
+    authors = [""]
+    full_desc = ""
+    descriptors = [""]
+
+    def __init__(self, pub_id, title, url, full_desc):
+        self.pub_id = pub_id
+        self.title = title
+        self.url = url
+        self.full_desc = full_desc
+        self.authors = get_pub_authors(pub_id)
+        self.descriptors = get_pub_descriptors(pub_id)
 
 def get_pub_authors(pub_id):
     session = model.session
@@ -91,11 +107,24 @@ def get_pub_authors(pub_id):
     pub_auth_list = pub.pub_auth
     pub_auth_id_list = [pub_auth.auth_id for pub_auth in pub_auth_list]
     auths = [session.query(model.Author).get(auth_id) for auth_id in pub_auth_id_list]
+
     auth_dicts = []
     for auth in auths:
         auth_dicts.append(row2dict(auth))
 
-    return auth_dicts
+    string_auths = ""
+    for auth_dict in auth_dicts:
+        author_string = ''
+        author_string += (auth_dict['last_name'] + ', ' + 
+                          auth_dict['first_name'] + ' ' + 
+                          auth_dict['middle_name'])
+
+        if auth_dict == auth_dicts[0]:
+            string_auths += author_string
+        else:
+            string_auths += "; %s" %author_string
+
+    return string_auths
 
 def get_pub_descriptors(pub_id):
     session = model.session
@@ -108,7 +137,17 @@ def get_pub_descriptors(pub_id):
     for desc in descs:
         desc_dicts.append(row2dict(desc))
 
-    return desc_dicts
+    string_descs = ""
+    for desc_dict in desc_dicts:
+        desc_string = ''
+        desc_string += (desc_dict['phrase'])
+        
+        if desc_dict == desc_dicts[0]:
+            string_descs += desc_string
+        else:
+            string_descs += ", %s" %desc_string
+
+    return string_descs
 
 def get_pub_desc_ids(pub_id):
     session = model.session
@@ -134,7 +173,8 @@ def get_auth_publications(auth_id):
     pubs = [session.query(model.Publication).get(pub_id) for pub_id in pub_auth_id_list]
     pub_dicts = []
     for pub in pubs:
-        pub_dicts.append(row2dict(pub))
+        pub_dict = PubResultsInfo(pub.id, pub.title, pub.url, pub.full_desc).__dict__
+        pub_dicts.append(pub_dict)
     return pub_dicts
 
 ### GET DESCRIPTOR INFO
