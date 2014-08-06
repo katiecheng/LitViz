@@ -21,6 +21,8 @@ Technology Stack
 - JavaScript (jQuery, D3.js)
 
 
+
+
 __Data Flow Diagram__:
 ![Alt text](/static/img/appflow.jpeg)
 
