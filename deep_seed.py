@@ -21,7 +21,7 @@ def cycle():
         'Dec':12, 'December':12
     }
 
-    for group in range(16501,16526, 5):
+    for group in range(2436,16526, 5):
     # for group in range(1,5,5):
         print "----------------",group,"----------------"
 

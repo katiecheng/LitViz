@@ -16,7 +16,23 @@
     div#message {
         margin-left: 15px;
     }
-    a:link {
+    div.title{
+        width:85%;
+        display: inline-block;
+    }
+    h4.title{
+        margin-bottom: 5px;
+    }
+    div.citationct{
+        width:14%;
+        display:inline-block;
+        vertical-align:top;
+        text-align: right;
+    }
+    h4.citationct{
+        margin-bottom: 5px;
+    }
+    a {
         color: #008989;
         text-decoration: none;
     }
@@ -33,19 +49,15 @@
     {% for i in range(length) %}
     
         <div id = "entry">
-
-            <h4 class="title" ><a href = {{ results[i].url }} >{{ results[i].title }}</a></h4> 
-
-
+            <div class="title"><h4 class="title" ><a href = {{ results[i].url }} >{{ results[i].title }}</a></h4></div>
+            <div class="citationct"><h4 class="citationct">Cited by {{ results[i].citation_count }}</h4></div>
             <p><b>{{ results[i].authors }}</b></p>
             <p>{{ results[i].full_desc }}</p>
             <p>{{ results[i].descriptors }}</p>
-
             <form id="form" action="/submit" method="POST">
                 <input type="hidden" name="hidden_id" value="{{ results[i].pub_id }}">
                 <input id="{{ results[i].pub_id }}" class="vizbutton" type="submit" value="Visualize Data!" name="viz_button"/>
             </form>
-
         </div>
     
     {% endfor %}
@@ -69,7 +81,8 @@
         $("#offset").val(parseInt($("#offset").val()) + 1)
         $.each(list_json, function(i,json) {
             var div = "<div id = 'entry'>";
-            div += "<h4><a href = " + json['url'] + ">" + json['title'] + "</a></h4>";
+            div += "<div class='title'><h4 class='title' ><a href = " + json['url'] + ">" + json['title'] + "</a></h4></div>";
+            div += "<div class='citationct'><h4 class='citationct'>Cited by " + json['citation_count'] + "</h4></div>";
             div += "<p><b>" + json['authors'] + "</b></p>";
             div += "<p>" + json['full_desc'] + "</p>";
             div += "<p>" + json['descriptors'] + "</p>";

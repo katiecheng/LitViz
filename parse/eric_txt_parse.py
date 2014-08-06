@@ -24,6 +24,8 @@ def get_references(text):
 
 def get_authors(reference):
     pattern = r"([A-Z][a-z]+, +[A-Z]\. +[A-Z]*\.* *[A-Z]*\.*)"
+    pattern2 = r"([A-Z][a-z]*-?[A-Z]?[a-z]*?, [A-Z]\. ?[A-Z]?\.? ?[A-Z]?\.?)"
+    
     match = re.findall(pattern, reference)
 
     authors = []

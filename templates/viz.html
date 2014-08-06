@@ -76,7 +76,7 @@
     <div id="gifback">
     </div>
     <div id="litvizgif">
-        <img id="litvizgif" src="static/litvizgif_basic.gif">
+        <img id="litvizgif" src="static/img/litvizgif_basic.gif">
     </div>
     <div id="pubinfo">
         <p></p>
@@ -90,8 +90,8 @@
 var tree_data = {{ data|safe }}; //send in json data from litviz.py
 
 function tree(tree_data) {
-    $("div#gifback").show()
-    $("div#litvizgif").show()
+    // $("div#gifback").show()
+    // $("div#litvizgif").show()
 
     var data = tree_data["data"]
     var year_min = tree_data["year_min"]
@@ -209,14 +209,14 @@ function tree(tree_data) {
             })
             .on("click", (function(d) {
                 $("#pubinfo").hide();
-                $("div#litvizgif").show();
+                // $("div#litvizgif").show();
                 $.ajax({
                     url: "/update",
                     data: { "pub_id": d.id },
                     success: redrawgraph,
                     dataType: "json"
                 });
-                $("div#litvizgif").hide();
+                // $("div#litvizgif").hide();
             }) )
 
         $("div#pubinfo")

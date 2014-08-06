@@ -13,11 +13,6 @@ import simplejson as json
 app = Flask(__name__)
 app.secret_key = '\xf5!\x07!qj\xa4\x08\xc6\xf8\n\x8a\x95m\xe2\x04g\xbb\x98|U\xa2f\x03'
 
-# @app.route("/")
-# def d3_page():
-#     return render_template("d3.html")
-
-
 # Render the home page
 @app.route("/", methods=["GET", "POST"])
 def show_front_page():
@@ -81,7 +76,6 @@ def lazyload():
     search_text = session.get("search_text")
     search_type = session.get("search_type")
     offset = int(request.args.get("offset").encode("utf-8"))
-    print offset
     if offset == 0:
         return
     if search_type == "Title":

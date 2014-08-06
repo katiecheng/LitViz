@@ -71,16 +71,16 @@ def get_pubs(search_text, column, index):
     if column == "title":
         pubs = (session.query(model.Publication)
                 .filter(model.Publication.title.ilike("%" + search_text + "%"))
-                .order_by(model.Publication.id)
+                .order_by(model.Publication.citation_count.desc())
                 .slice(index*10, index*10+10))
     elif column == "full_desc":
         pubs = (session.query(model.Publication)
                 .filter(model.Publication.full_desc.ilike("% " + search_text + " %"))
-                .order_by(model.Publication.id)
+                .order_by(model.Publication.citation_count.desc())
                 .slice(index*10, index*10+10))
     pub_dicts = []
     for pub in pubs:
-        pub_dict = PubResultsInfo(pub.id, pub.title, pub.url, pub.full_desc).__dict__
+        pub_dict = PubResultsInfo(pub.id, pub.title, pub.url, pub.full_desc, pub.citation_count).__dict__
         pub_dicts.append(pub_dict)
     return pub_dicts
 
@@ -91,14 +91,18 @@ class PubResultsInfo(object):
     authors = [""]
     full_desc = ""
     descriptors = [""]
+    citation_count = 0
 
-    def __init__(self, pub_id, title, url, full_desc):
+    def __init__(self, pub_id, title, url, full_desc, citation_count):
         self.pub_id = pub_id
         self.title = title
         self.url = url
         self.full_desc = full_desc
+        if citation_count:
+            self.citation_count = citation_count
         self.authors = get_pub_authors(pub_id)
         self.descriptors = get_pub_descriptors(pub_id)
+
 
 def get_pub_authors(pub_id):
     session = model.session
@@ -173,7 +177,7 @@ def get_auth_publications(auth_id):
     pubs = [session.query(model.Publication).get(pub_id) for pub_id in pub_auth_id_list]
     pub_dicts = []
     for pub in pubs:
-        pub_dict = PubResultsInfo(pub.id, pub.title, pub.url, pub.full_desc).__dict__
+        pub_dict = PubResultsInfo(pub.id, pub.title, pub.url, pub.full_desc, pub.citation_count).__dict__
         pub_dicts.append(pub_dict)
     return pub_dicts
 
