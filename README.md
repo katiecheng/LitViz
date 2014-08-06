@@ -13,7 +13,6 @@ LIT VIZ caters to these needs by presenting users with clear visualizations and 
 
 Technology Stack
 -----------
- 
 - Python (Flask, SQLAlchemy, PyQuery, PDFMiner)
 - PostgreSQL
 - Jinja2
